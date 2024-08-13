@@ -24,7 +24,7 @@ namespace Core.App.Form.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(FormModel model)
+        public async Task<IActionResult> Edit(Models.Form model)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Core.App.Form.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Put(Guid id, FormModel model)
+        public async Task<IActionResult> Put(Guid id, Models.Form model)
         {
             try
             {

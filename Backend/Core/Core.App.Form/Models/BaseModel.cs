@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+
 namespace Core.App.Form.Models;
 
 public class BaseModel
 {
-    
-    public required Guid Id { get; set; }
-    public required string Name { get; set; }
-    [DataType(DataType.DateTime)]
-    public required DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+    [Key] public Guid Id { get; set; } = Guid.NewGuid();
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+    public Guid CreatedBy { get; set; }
+    public Guid LastModifiedBy { get; set; }
     public bool IsDeleted { get; set; } = false;
 }

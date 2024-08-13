@@ -1,5 +1,6 @@
 using Core.App.Form.Models;
 using Core.App.Form.Data;
+using Core.App.Form.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,33 +13,57 @@ namespace Core.App.Form.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await dBContext.FormTemplate.ToListAsync();
-            return Ok(result);
+            try
+            {
+                var result = await dBContext.FormTemplate.ToListAsync();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var result = await dBContext.FormTemplate.FindAsync(id);
-            return Ok(result);
+            try
+            {
+                var result = await dBContext.FormTemplate.FindAsync(id);
+                if (result == null) return NotFound();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(FormTemplateModel model)
+        public async Task<IActionResult> Create(FormTemplateViewModel model)
         {
             try
             {
-                await dBContext.SaveChangesAsync();
+                Template t = new()
+                {
+
+                };
+                FormTemplate ft = new()
+                {
+                  TemplateId  = t.Id
+                };
+                await dBContext.FormTemplate.AddAsync(ft);
             }
             catch (Exception e)
             {
                 return BadRequest();
             }
-            return Ok();
+
+            return Ok(model);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Put(Guid id, FormTemplateModel model)
+        public async Task<IActionResult> Edit(Guid id, FormTemplate model)
         {
             try
             {
@@ -48,6 +73,7 @@ namespace Core.App.Form.Controllers
             {
                 return BadRequest();
             }
+
             return Ok();
         }
 
@@ -66,7 +92,7 @@ namespace Core.App.Form.Controllers
                 return BadRequest();
             }
 
-            return Ok(new {message ="Item deleted successfully"});
+            return Ok(new { message = "Item deleted successfully" });
         }
     }
 }
