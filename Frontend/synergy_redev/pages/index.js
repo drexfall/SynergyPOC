@@ -1,18 +1,22 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-import GrapesJSEditor from '../components/GrapejsEditor';
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <>
+    <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <GrapesJSEditor />
+
+        <h2 className={styles.title}>
+          <Link href='/tools/editor'>Open editor</Link>
+        </h2>
+        
       </main>
-    </>
+    </div>
   );
 }
