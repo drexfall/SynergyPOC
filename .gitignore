@@ -1,4 +1,5 @@
 /Backend/Core/.idea/
 /.idea/
-/Backend/Core/Core/bin/
-/Backend/Core/Core/obj/
+/Backend/Core/Core.App.Form/bin/
+/Backend/Core/Core.App.Form/obj/
+/Frontend/node_modules
