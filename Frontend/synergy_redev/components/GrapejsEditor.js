@@ -41,7 +41,7 @@ const GrapesJSEditor = () => {
       },
     ];
 
-    editor.DomComponents.addType('custom-columns', {
+    editor.DomComponents.addType('columns', {
       model: {
         defaults: {
           tagName: 'div',
@@ -85,7 +85,7 @@ const GrapesJSEditor = () => {
               attributes: { class: 'col-span-1' },
               components: [
                 {
-                  type: 'custom-container',
+                  type: 'container',
                 },
               ],
             });
@@ -164,7 +164,7 @@ const GrapesJSEditor = () => {
       },
     });
 
-    editor.DomComponents.addType('custom-label', {
+    editor.DomComponents.addType('label', {
       model: {
         defaults: {
           tagName: 'label',
@@ -201,7 +201,7 @@ const GrapesJSEditor = () => {
       },
     });
 
-    editor.DomComponents.addType('custom-select', {
+    editor.DomComponents.addType('select', {
       model: {
         defaults: {
           tagName: 'select',
@@ -298,7 +298,7 @@ const GrapesJSEditor = () => {
       },
     });
 
-    editor.DomComponents.addType('custom-container', {
+    editor.DomComponents.addType('container', {
       model: {
         defaults: {
           tagName: 'div',
@@ -323,7 +323,7 @@ const GrapesJSEditor = () => {
       },
     });
 
-    editor.DomComponents.addType('custom-textarea', {
+    editor.DomComponents.addType('textarea', {
       model: {
         defaults: {
           tagName: 'textarea',
@@ -366,7 +366,7 @@ const GrapesJSEditor = () => {
       },
     });
 
-    editor.DomComponents.addType('custom-checkbox', {
+    editor.DomComponents.addType('checkbox', {
       model: {
         defaults: {
           tagName: 'div',
@@ -437,7 +437,7 @@ const GrapesJSEditor = () => {
       },
     });
 
-    editor.DomComponents.addType('custom-radio', {
+    editor.DomComponents.addType('radio', {
       model: {
         defaults: {
           tagName: 'div',
@@ -523,7 +523,7 @@ const GrapesJSEditor = () => {
       },
     });
 
-    editor.DomComponents.addType('custom-radio-group', {
+    editor.DomComponents.addType('radio-group', {
       model: {
         defaults: {
           tagName: 'div',
@@ -557,53 +557,309 @@ const GrapesJSEditor = () => {
         },
       },
     });
+    
+    editor.DomComponents.addType('heading', {
+      model: {
+        defaults: {
+          tagName: 'h1',
+          droppable: false,
+          draggable: true,
+          attributes: { class: 'text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl' }, // Default class for h1
+          content: 'Heading Text',
+          traits: [
+            ...commonTraits,
+            {
+              type: 'select',
+              label: 'Tag',
+              name: 'tagName',
+              options: [
+                { value: 'h1', name: 'H1' },
+                { value: 'h2', name: 'H2' },
+                { value: 'h3', name: 'H3' },
+                { value: 'h4', name: 'H4' },
+                { value: 'h5', name: 'H5' },
+                { value: 'h6', name: 'H6' },
+              ],
+              changeProp: 1,
+            },
+            {
+              type: 'text',
+              label: 'Text',
+              name: 'content',
+              changeProp: 1,
+            },
+          ],
+        },
+        init() {
+          this.listenTo(this, 'change:content', this.updateContent);
+          this.listenTo(this, 'change:tagName', this.updateTagName);
+          this.listenTo(this, 'change:key', this.validateKey);
+        },
+        validateKey() {
+          validateKey(this);
+        },
+        updateContent() {
+          const content = this.get('content');
+          const tagName = this.get('tagName');
+          const el = this.view?.el.querySelector(tagName);
+    
+          if (el) {
+            el.innerHTML = content;
+          }
+        },
+        updateTagName() {
+          const tagName = this.get('tagName');
+          const newClass = this.getHeadingClass(tagName);
+          
+          this.set({ tagName });
+          
+          this.addAttributes({ class: newClass });
+          
+          this.view.render();
+        },
+        getHeadingClass(tagName) {
+          switch (tagName) {
+            case 'h1':
+              return 'text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl';
+            case 'h2':
+              return 'text-3xl font-extrabold font-bold leading-tight text-gray-900 md:text-4xl lg:text-5xl';
+            case 'h3':
+              return 'text-2xl font-extrabold font-semibold leading-tight text-gray-900 md:text-3xl lg:text-4xl';
+            case 'h4':
+              return 'text-xl font-extrabold font-medium leading-tight text-gray-900 md:text-2xl lg:text-3xl';
+            case 'h5':
+              return 'text-lg font-extrabold font-normal leading-tight text-gray-900 md:text-xl lg:text-2xl';
+            case 'h6':
+              return 'text-base font-extrabold font-light leading-tight text-gray-900 md:text-lg lg:text-xl';
+          }
+        },
+      },
+      view: {
+        onRender() {
+          this.model.updateContent();
+        },
+      },
+    });
+    
+    editor.DomComponents.addType('paragraph', {
+      model: {
+        defaults: {
+          tagName: 'p',
+          droppable: false,
+          draggable: true,
+          attributes: { 
+            class: 'text-base leading-normal text-gray-900',
+            contenteditable: 'true'
+          },
+          content: 'Paragraph text...', 
+          traits: [
+            {
+              type: 'textarea', 
+              label: 'Content',
+              name: 'content',
+              changeProp: 1, 
+            },
+          ],
+        },
+        init() {
+          this.listenTo(this, 'change:content', this.updateContent); 
+          this.listenTo(this, 'change:content', this.updateViewContent); 
+        },
+        updateContent() {
+          const content = this.get('content'); 
+          const el = this.view?.el.querySelector('p'); 
+    
+          if (el) {
+            el.innerHTML = content; 
+          }
+        },
+        updateViewContent() {
+          const el = this.view?.el;
+          if (el) {
+            el.innerHTML = this.get('content');
+          }
+        },
+      },
+      view: {
+        onRender() {
+          this.model.updateContent();
+          this.el.addEventListener('blur', () => {
+            this.model.set('content', this.el.innerHTML);
+          }, true);
+        },
+      },
+    });
+    
+    editor.DomComponents.addType('file-upload', {
+      model: {
+        defaults: {
+          tagName: 'div',
+          attributes: { class: 'mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10' },
+          droppable: false,
+          draggable: true,
+          selectable: true,
+          components: [
+            {
+              tagName: 'div',
+              attributes: { class: 'text-center' },
+              selectable: false, 
+              components: [
+                {
+                  tagName: 'div',
+                  attributes: { class: 'mx-auto h-12 w-12 text-gray-300' },
+                  content: `
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd"/>
+                    </svg>
+                  `,
+                  selectable: false
+                },
+                {
+                  tagName: 'div',
+                  attributes: { class: 'mt-4 flex text-sm leading-6 text-gray-600' },
+                  selectable: false, 
+                  components: [
+                    {
+                      tagName: 'label',
+                      attributes: {
+                        for: 'file-upload',
+                        class: 'relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500',
+                      },
+                      selectable: false,
+                      components: [
+                        {
+                          tagName: 'span',
+                          content: 'Upload a file',
+                          selectable: false
+                        },
+                        {
+                          tagName: 'input',
+                          attributes: {
+                            type: 'file',
+                            class: 'sr-only'
+                          },
+                          selectable: false,
+                          editable: false
+                        }
+                      ]
+                    },
+                    {
+                      tagName: 'p',
+                      content: 'or drag and drop',
+                      attributes: { class: 'pl-1' },
+                      selectable: false
+                    }
+                  ]
+                },
+                {
+                  tagName: 'p',
+                  content: 'PNG, JPG, GIF up to 10MB',
+                  attributes: { class: 'text-xs leading-5 text-gray-600' },
+                  selectable: false
+                }
+              ]
+            }
+          ],
+          traits: [
+            ...commonTraits,
+            ...formTraits,
+            {
+              type: 'text',
+              label: 'File types',
+              name: 'file-types',
+              changeProp: 1,
+            },
+            {
+              type: 'text',
+              label: 'Max file size',
+              name: 'max-size',
+              changeProp: 1,
+            },
+          ],
+        },
+        init() {
+          this.listenTo(this, 'change:name', this.updateName);
+          this.listenTo(this, 'change:key', this.validateKey);
+          this.listenTo(this, 'change:name', this.validateName);
+        },
+        validateKey() {
+          validateKey(this);
+        },
+        validateName() {
+          validateName(this);
+        },
+        updateName() {
+          const name = this.get('name');
+          const inputEl = this.view?.el.querySelector('input');
+          if (inputEl) {
+            inputEl.setAttribute('name', name);
+          }
+        },
+      },
+    });    
+    
 
     const blocks = [
       {
         label: 'Columns',
-        content: { type: 'custom-columns' },
+        content: { type: 'columns' },
         category: 'Layout',
       },
       {
-        label: 'Input Field',
+        label: 'Input',
         content: { type: 'input' },
         category: 'Form',
       },
       {
         label: 'Label',
-        content: { type: 'custom-label' },
+        content: { type: 'label' },
         category: 'Form',
       },
       {
-        label: 'Select Item',
-        content: { type: 'custom-select' },
+        label: 'Select',
+        content: { type: 'select' },
         category: 'Form',
       },
       {
         label: 'Container',
-        content: { type: 'custom-container' },
+        content: { type: 'container' },
         category: 'Layout',
       },
       {
         label: 'Textarea',
-        content: { type: 'custom-textarea' },
+        content: { type: 'textarea' },
         category: 'Form',
       },
       {
         label: 'Checkbox',
-        content: { type: 'custom-checkbox' },
+        content: { type: 'checkbox' },
         category: 'Form',
       },
       {
         label: 'Radio Group',
-        content: { type: 'custom-radio-group' },
+        content: { type: 'radio-group' },
         category: 'Form',
       },
       {
         label: 'Radio Button',
-        content: { type: 'custom-radio' },
+        content: { type: 'radio' },
         category: 'Form',
       },
+      {
+        label: 'Heading',
+        content: { type: 'heading' },
+        category: 'Text',
+      },
+      {
+        label: 'Paragraph',
+        content: { type: 'paragraph' },
+        category: 'Text',
+      },
+      {
+        label: 'File Upload',
+        category: 'Form',
+        content: { type: 'file-upload' },
+      }
     ]
 
     blocks.forEach(block => {
@@ -628,6 +884,10 @@ function isKeyUnique(key) {
   return !allKeys.has(key);
 }
 
+function isNameUnique(key) {
+  return !allNames.has(key);
+}
+
 function validateKey(element) {
   const newKey = element.get('key');
   const oldKey = element.previous('key');
@@ -646,6 +906,7 @@ function validateKey(element) {
 }
 
 function validateName(element) {
+  debugger;
   const newKey = element.get('name');
   const oldKey = element.previous('name');
 
@@ -653,7 +914,7 @@ function validateName(element) {
     allNames.delete(oldKey);
   }
   if (newKey) {
-    if (!isKeyUnique(newKey)) {
+    if (!isNameUnique(newKey)) {
       alert('Name must be unique. Please enter a different Name.');
       element.set('name', null);
     } else {
