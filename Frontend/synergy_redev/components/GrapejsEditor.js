@@ -429,12 +429,10 @@ const GrapesJSEditor = () => {
         },
         updateName() {
           const name = this.get('name');
-          this.components().each(component => {
-            const inputEl = component.view?.el.querySelector('input[type="checkbox"]');
-            if (inputEl) {
-              inputEl.setAttribute('name', name);
-            }
-          });
+          const inputEl = this.view?.el.querySelector('input[type="checkbox"]');
+          if (inputEl) {
+            inputEl.setAttribute('name', name);
+          }
         },
       },
     });
@@ -512,12 +510,10 @@ const GrapesJSEditor = () => {
         },
         updateName() {
           const name = this.get('name');
-          this.components().each(component => {
-            const inputEl = component.view?.el.querySelector('input[type="radio"]');
-            if (inputEl) {
-              inputEl.setAttribute('name', name);
-            }
-          });
+          const inputEl = this.view?.el.querySelector('input[type="radio"]');
+          if (inputEl) {
+            inputEl.setAttribute('name', name);
+          }
         },
       },
       view: {
