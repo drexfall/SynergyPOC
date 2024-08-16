@@ -9,6 +9,6 @@ public class Template: BaseModel
     public string Description { get; set; }
     
     public string Json { get; set; } = "{}";
-    public string DataJson { get; set; } = "{}";
+    public string Html { get; set; } = "";
     
 }

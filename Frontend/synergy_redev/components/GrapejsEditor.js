@@ -239,19 +239,19 @@ const GrapesJSEditor = () => {
         id: generateRandomId(),
         label: 'Input Field',
         content: { type: 'input' },
-        category: 'Form',
+        category: 'General',
       },    
       {
         id: generateRandomId(),
         label: 'Label',
         content: { type: 'custom-label' },
-        category: 'Form',
+        category: 'General',
       },
       {
         id: generateRandomId(),
         label: 'Select Item',
         content: { type: 'custom-select' },
-        category: 'Form',
+        category: 'General',
       },
     ]
 

@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "autoprefixer": "^10.4.20",
     "grapesjs": "^0.21.12",
     "grapesjs-preset-webpage": "^1.0.3",

@@ -1,21 +1,23 @@
 using Core.App.Form.Models;
 using Core.App.Form.Data;
 using Core.App.Form.ViewModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Core.App.Form.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FormTemplateController(CoreDbContext dBContext) : ControllerBase
+    public class TemplateController(CoreDbContext dBContext) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var result = await dBContext.FormTemplate.ToListAsync();
+                var result = await dBContext.Template.ToListAsync();
                 return Ok(result);
             }
             catch (Exception e)
@@ -29,7 +31,7 @@ namespace Core.App.Form.Controllers
         {
             try
             {
-                var result = await dBContext.FormTemplate.FindAsync(id);
+                var result = await dBContext.Template.FindAsync(id);
                 if (result == null) return NotFound();
                 return Ok(result);
             }
@@ -40,30 +42,33 @@ namespace Core.App.Form.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(FormTemplateViewModel model)
+        public IActionResult Create(TemplateViewModel model)
         {
             try
             {
                 Template t = new()
                 {
-
+                    Name = model.Name ?? "",
+                    DisplayName = model.DisplayName ?? "",
+                    Code = model.Code ?? "",
+                    CreatedBy = Guid.NewGuid(),
+                    LastModifiedBy = Guid.NewGuid(),
+                    Description = model.Description ?? "",
+                    Html = model.Html ?? "<div></div>",
+                    Json = model.Json ?? "{}"
                 };
-                FormTemplate ft = new()
-                {
-                  TemplateId  = t.Id
-                };
-                await dBContext.FormTemplate.AddAsync(ft);
+                dBContext.Template.Add(t);
+                dBContext.SaveChanges();
+                return CreatedAtAction(nameof(Create), new { id = t.Id }, t);
             }
             catch (Exception e)
             {
                 return BadRequest();
             }
-
-            return Ok(model);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Edit(Guid id, FormTemplate model)
+        public async Task<IActionResult> Edit(Guid id, Template model)
         {
             try
             {
@@ -80,9 +85,9 @@ namespace Core.App.Form.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var model = await dBContext.FormTemplate.FindAsync(id);
+            var model = await dBContext.Template.FindAsync(id);
             if (model == null) return NotFound();
-            dBContext.FormTemplate.Remove(model);
+            dBContext.Template.Remove(model);
             try
             {
                 await dBContext.SaveChangesAsync();

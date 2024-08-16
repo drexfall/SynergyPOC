@@ -5,7 +5,7 @@ using Core.App.Form.Models;
 
 namespace Core.App.Form.ViewModels
 {
-    public class FormTemplateViewModel : BaseModel
+    public class TemplateViewModel : BaseModel
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
@@ -13,6 +13,7 @@ namespace Core.App.Form.ViewModels
         public string Json { get; set; }
         public string DataJson { get; set; }
         public string Description { get; set; }
+        public string Html { get; set; }
     }
     // public class FormTemplateViewModel : INotifyPropertyChanged
     // {
