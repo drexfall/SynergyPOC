@@ -653,6 +653,7 @@ const GrapesJSEditor = () => {
           },
           content: 'Paragraph text...', 
           traits: [
+            ...commonTraits,
             {
               type: 'textarea', 
               label: 'Content',
@@ -664,6 +665,10 @@ const GrapesJSEditor = () => {
         init() {
           this.listenTo(this, 'change:content', this.updateContent); 
           this.listenTo(this, 'change:content', this.updateViewContent); 
+          this.listenTo(this, 'change:key', this.validateKey); 
+        },
+        validateKey() {
+          validateKey(this);
         },
         updateContent() {
           const content = this.get('content'); 
@@ -865,11 +870,15 @@ const GrapesJSEditor = () => {
     blocks.forEach(block => {
       editor.BlockManager.add(block.id, block);
     });
-
+    
+    window.editor = editor;
+    
     return () => {
       editor.destroy();
     };
   }, []);
+
+  
 
   return (
     <div>
