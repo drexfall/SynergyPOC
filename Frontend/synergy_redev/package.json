@@ -3,10 +3,14 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "start": "next start"
+    "start": "next start",
+    "minify": "sass --watch styles/ --style compressed styles/"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "autoprefixer": "^10.4.20",
     "grapesjs": "^0.21.12",
     "grapesjs-preset-webpage": "^1.0.3",
@@ -15,6 +19,7 @@
     "postcss": "^8.4.41",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sass": "^1.77.8",
     "tailwindcss": "^3.4.9"
   },
   "engines": {

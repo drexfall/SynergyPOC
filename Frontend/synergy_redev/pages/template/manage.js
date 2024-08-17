@@ -14,13 +14,32 @@ let elementArray = [
 	{name: "Workflow", component: <Workflow />, icon: faChartBar}
 ];
 
-function TabItem({name, icon, active}) {
-	return <li className="me-2">
-		<btn
-			className={active ? "inline-flex gap-2 items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group" : "inline-flex gap-2 items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"}>
+function TabItem({name, icon, active, group, target}) {
+	const handleClick = (event) => {
+		
+		const tabItem = event.target.classList.contains("tab-item") ? event.target : event.target.closest(".tab-item");
+		const tabGroup = tabItem.dataset.group;
+		const allTabs = document.querySelectorAll(`${tabGroup} .tab-item`);
+		
+		allTabs.forEach(tab => {
+			let pane = document.querySelector(tab.dataset.target);
+			if (tab === tabItem) {
+				tab.classList.add("active");
+				pane.classList.add("active");
+			} else {
+				tab.classList.remove("active");
+				pane.classList.remove("active");
+			}
+		})
+	}
+	
+	return <li className={`tab-item me-2 ${active?'active':''}`}
+	           data-group={group}
+	           data-target={target}>
+		<button onClick={handleClick}>
 			<FontAwesomeIcon icon={icon}></FontAwesomeIcon>
 			{name}
-		</btn>
+		</button>
 	</li>
 	
 }
@@ -29,21 +48,26 @@ export default function Manage() {
 	return (
 		<>
 			<div className={"w-full h-full p-6"}>
-				<div className={"max-w-xl"}>
-					<h1 className={"text-cyan-50 font-bold  text-4xl"}>Template Editor</h1>
-					<div className="max-w-lg self-center border-b border-gray-200 dark:border-gray-700">
-						<ul className="flex text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+				<h1 className={"text-cyan-50 font-bold mb-5 text-center text-4xl"}>Template Editor</h1>
+				<div className={"w-full flex flex-col gap-4 items-center"}>
+					<div className="border-b border-gray-200 dark:border-gray-700">
+						<ul id={"template-tabs"}
+						    className="flex text-sm font-medium text-center text-gray-500 dark:text-gray-400">
 							{elementArray.map((element, index) => {
 								return <TabItem icon={element.icon}
 								                name={element.name}
+								                group={"#template-tabs"}
+								                target={`#${element.name}-pane`}
 								                active={index === 0} />
 							})}
 						</ul>
 					</div>
-					<section id={"template-panes w-full"}>
+					<section
+						className={"panes max-w-4xl w-full flex items-center flex-col"}>
 						{elementArray.map((element, index) => {
-							return <div key={index}
-							            className={"w-full"}>
+							return <div id={element.name + "-pane"}
+							            key={index}
+							            className={`pane w-full ${index ===0?'active':''}` }>
 								{element.component}
 							</div>
 						})}

@@ -1,3 +1,4 @@
+using System.Text;
 using Core.App.Form.Models;
 using Core.App.Form.Data;
 using Core.App.Form.ViewModels;
@@ -10,6 +11,7 @@ namespace Core.App.Form.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class TemplateController(CoreDbContext dBContext) : ControllerBase
     {
         [HttpGet]
@@ -59,6 +61,10 @@ namespace Core.App.Form.Controllers
                 };
                 dBContext.Template.Add(t);
                 dBContext.SaveChanges();
+
+                var query = $@"create table template.""{t.Name}""();";
+
+                dBContext.Database.ExecuteSql($"{query}");
                 return CreatedAtAction(nameof(Create), new { id = t.Id }, t);
             }
             catch (Exception e)
