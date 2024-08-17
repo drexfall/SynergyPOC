@@ -1,16 +1,18 @@
 {
   "private": true,
   "scripts": {
+    "dev": "node server.js",
     "build": "next build",
-    "dev": "next dev",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "autoprefixer": "^10.4.20",
+    "express": "^4.19.2",
     "grapesjs": "^0.21.12",
     "grapesjs-preset-webpage": "^1.0.3",
     "gridjs": "^6.2.0",
+    "http-proxy-middleware": "^3.0.0",
     "next": "latest",
     "postcss": "^8.4.41",
     "react": "18.2.0",
