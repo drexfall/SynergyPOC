@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 
-const LoginForm = () => {
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -180,4 +180,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Login;
