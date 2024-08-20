@@ -11,8 +11,11 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@heroicons/react": "^2.1.5",
     "autoprefixer": "^10.4.20",
+    "axios": "^1.7.4",
     "express": "^4.19.2",
+    "formik": "^2.4.6",
     "grapesjs": "^0.21.12",
     "grapesjs-preset-webpage": "^1.0.3",
     "gridjs": "^6.2.0",
@@ -22,7 +25,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sass": "^1.77.8",
-    "tailwindcss": "^3.4.9"
+    "tailwindcss": "^3.4.9",
+    "yup": "^1.4.0"
   },
   "engines": {
     "node": ">=18"
