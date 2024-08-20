@@ -3,6 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import Image from 'next/image'
+import Logo from '../Assets/Images/Logo.png';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -50,18 +52,20 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          <div>
-            <img
-              src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
-              className="w-32 mx-auto"
+      <div className="max-w-screen-xl m-0 sm:m-2 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-6">
+          <div className="flex items-center justify-center logo-container">
+            <Image
+              src={Logo}
               alt="Logo"
+               width={150}
+               height={80}
+              className="max-w-full h-auto"
             />
           </div>
-          <div className="mt-12 flex flex-col items-center">
+          <div className="mt-0 flex flex-col items-center">
             <h1 className="text-2xl xl:text-3xl font-extrabold">Login</h1>
-            <div className="w-full flex-1 mt-8">
+            <div className="w-full flex-1 mt-4">
               <div className="mx-auto max-w-xs">
                 <form onSubmit={formik.handleSubmit}>
                   <input
