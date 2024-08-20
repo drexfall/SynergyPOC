@@ -48,7 +48,7 @@ export default function Manage() {
 	return (
 		<>
 			<div className={"w-full h-full p-6"}>
-				<h1 className={"dark:text-cyan-50 text-indigo-950 font-bold mb-5 text-center text-4xl"}>Template Editor</h1>
+				<h1 className={"text-cyan-50 font-bold mb-5 text-center text-4xl"}>Template Editor</h1>
 				<div className={"w-full flex flex-col gap-4 items-center"}>
 					<div className="border-b border-gray-200 dark:border-gray-700">
 						<ul id={"template-tabs"}
