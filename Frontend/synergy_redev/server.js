@@ -9,8 +9,8 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = express();
 
-  server.use('/api', createProxyMiddleware({
-    target: 'https://localhost:44346',
+  server.use('/dotnet', createProxyMiddleware({
+    target: 'https://localhost:44326',
     changeOrigin: true,
     secure: false,
   }));
@@ -19,8 +19,8 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  server.listen(3000, (err) => {
+  server.listen(3001, (err) => {
     if (err) throw err;
-    console.log('> Ready on http://localhost:3000');
+    console.log('> Ready on http://localhost:3001');
   });
 });

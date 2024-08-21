@@ -38,10 +38,11 @@ const LoginForm = () => {
         //   .required('Please select a portal'),
       }),
       onSubmit: async (values) => {
-  
+        console.log(values)
         try {
-          const response = await axios.post('/api/account/SmartLockerLogin', values);
+          const response = await axios.post('/dotnet/api/Authenticate/AuthenticateUser?email=' + values.email + '&password=' + values.password);
           console.log(response.data);
+          await axios.post('/api/insertUser', response.data);
           // Handle success (e.g., redirect, show a success message)
         } catch (error) {
           console.error(error);
@@ -161,11 +162,11 @@ const LoginForm = () => {
                   </form>
   
                   <p className="mt-6 text-xs text-gray-600 text-center">
-                    I agree to abide by templatana's
+                    I agree to Synergy's&nbsp;
                     <a href="#" className="border-b border-gray-500 border-dotted">
                       Terms of Service
                     </a>
-                    and its
+                    &nbsp;and its&nbsp;
                     <a href="#" className="border-b border-gray-500 border-dotted">
                       Privacy Policy
                     </a>

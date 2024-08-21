@@ -14,6 +14,7 @@
     "@heroicons/react": "^2.1.5",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.4",
+    "cookie": "^0.6.0",
     "express": "^4.19.2",
     "formik": "^2.4.6",
     "grapesjs": "^0.21.12",
@@ -25,6 +26,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sass": "^1.77.8",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "tailwindcss": "^3.4.9",
     "yup": "^1.4.0"
   },
