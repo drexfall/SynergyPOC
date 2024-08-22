@@ -47,7 +47,7 @@ module.exports = {
               },
               onProxyRes: async (proxyRes, req, res) => {
                 if (proxyRes.statusCode === 401) {
-                  const response = await axios.post('/api/delete-token', {}, {
+                  const response = await axios.post('/api/delete', {}, {
                     headers: {
                       'Content-Type': 'application/json',
                       'Cookie': req.headers.cookie,
