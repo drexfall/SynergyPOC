@@ -47,7 +47,7 @@ export default function General() {
 	}
 	return <form
 		ref={templateRef}
-		className="w-full flex flex-col justify-center p-4 bg-cyan-950 rounded-lg border-2 border-cyan-950 dark:border-cyan-800 shadow-2xl">
+		className="w-full flex flex-col justify-center p-4 bg-gray-800 rounded-lg border-2 border-cyan-950 dark:border-cyan-800 shadow-2xl">
 		<div className="mb-5">
 			<InputField id={"Name"}
 			            name={"Name"}

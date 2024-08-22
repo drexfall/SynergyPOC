@@ -1,24 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import "components/buttons";
 .tab-item {
-  > button {
-    @apply inline-flex gap-2 items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300
-  }
+  @apply transition-all cursor-pointer inline-flex gap-2 items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300;
 
   &.active {
-    > button {
-      @apply inline-flex gap-2 items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg dark:text-blue-500 dark:border-blue-500
-    }
+    @apply text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500
   }
-  
 }
 
 .pane {
-  
+
   @apply animate-fade;
   &:not(.active) {
     @apply hidden
+  }
+}
+
+.context-menu {
+  z-index: 999999;
+
+  .context-menu-item {
   }
 }
