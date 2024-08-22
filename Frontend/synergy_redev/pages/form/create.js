@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import Input from "../../components/FormIO/input";
+import Input from "../../components/FormIO/form";
 
 export default function Editor() {
     const [components, setComponents] = useState([]);

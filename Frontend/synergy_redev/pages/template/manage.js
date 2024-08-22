@@ -1,16 +1,18 @@
 import React from "react";
 import General from "../../components/template/General";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faGear} from "@fortawesome/free-solid-svg-icons";
+import {faGear, faTable} from "@fortawesome/free-solid-svg-icons";
 import {faChartBar, faPenToSquare, faRectangleList} from "@fortawesome/free-regular-svg-icons";
 import Configuration from "../../components/template/Configuration";
 import Dashboard from "../../components/template/Dashboard";
 import Workflow from "../../components/template/Workflow";
+import Table from "../../components/template/Table";
 
 let elementArray = [
 	{name: "General", component: <General />, icon: faPenToSquare},
 	{name: "Configuration", component: <Configuration />, icon: faGear},
 	{name: "Dashboard", component: <Dashboard />, icon: faRectangleList},
+	{name: "Table", component: <Table />, icon: faTable},
 	{name: "Workflow", component: <Workflow />, icon: faChartBar}
 ];
 
@@ -63,7 +65,7 @@ export default function Manage() {
 						</ul>
 					</div>
 					<section
-						className={"panes max-w-4xl w-full flex items-center flex-col"}>
+						className={"panes max-w-6xl w-full flex items-center flex-col"}>
 						{elementArray.map((element, index) => {
 							return <div id={element.name + "-pane"}
 							            key={index}
