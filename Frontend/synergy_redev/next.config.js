@@ -38,19 +38,29 @@ module.exports = {
               changeOrigin: true,
               pathRewrite: { '^/dotnet': '' },
               onProxyReq: (proxyReq, req, res) => {
-                // Reading the token from the cookie
                 const cookies = cookie.parse(req.headers.cookie || '');
                 const token = cookies.token;
 
-                // Adding the Authorization header with the bearer token
                 if (token) {
                   proxyReq.setHeader('Authorization', `Bearer ${token}`);
                 }
               },
-              onProxyRes: (proxyRes, req, res) => {
+              onProxyRes: async (proxyRes, req, res) => {
                 if (proxyRes.statusCode === 401) {
-                  res.writeHead(401, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ message: 'Unauthorized: Invalid or expired token' }));
+                  const response = await axios.post('/api/delete', {}, {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Cookie': req.headers.cookie,
+                    },
+                  });
+
+                  if (response.status === 200) {
+                    res.writeHead(401, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ message: 'Unauthorized: Invalid or expired token' }));
+                  } else {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to delete token record and clear cookies' }));
+                  }
                 }
               },
             })

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from "../../components/FormIO/input";
 import Textarea from "../../components/FormIO/textarea";
 import DateTimeInput from "../../components/FormIO/datetime";
@@ -7,6 +7,11 @@ import RadioGroup from "../../components/FormIO/radio";
 
 export default function Editor() {
     const [components, setComponents] = useState([]);
+
+    useEffect(() => {
+        getJson('7e4cb000-2a1b-4a4b-ae94-1f0e205ea79a');
+    }, []);
+
     async function onSubmit(event) {
         event.preventDefault()
 
@@ -215,24 +220,17 @@ export default function Editor() {
 
             <main>
                 <div className="m-5">
-                    <button
+                    {/* <button
                         type="button"
                         className="flex justify-center py-2 px-4 border border-transparent rounded-md
                         shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none
                         focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-7"
                         onClick={() => getJson('7e4cb000-2a1b-4a4b-ae94-1f0e205ea79a')}
-                    > Get Form from JSON </button>
+                    > Get Form from JSON </button> */}
                     <form onSubmit={onSubmit}>
                         {Array.isArray(components) && components.length > 0 ? (
                             <>
                                 {components.map(component => renderComponent(component))}
-                                {/*<button*/}
-                                {/*    type="submit"*/}
-                                {/*    className="flex justify-center py-2 px-4 border border-transparent rounded-md*/}
-                                {/*    shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none*/}
-                                {/*    focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mb-7"*/}
-                                {/*    onClick={() => getJson('7e4cb000-2a1b-4a4b-ae94-1f0e205ea79a')}*/}
-                                {/*> Submit </button>*/}
                             </>
 
                         ) : (
