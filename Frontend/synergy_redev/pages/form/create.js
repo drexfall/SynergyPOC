@@ -23,19 +23,17 @@ export default function Editor() {
 
     async function getJson(templateId) {
         try {
-            const response = await fetch('/dotnet/cms/template/GetTemplateJson?templateId=' + templateId, {
+            const response = await fetch('/dotnet/GetTemplateJson?templateId=' + templateId, {
                 method: 'GET',
             });
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
             const data = await response.json();
             console.log(data);
-            var res = JSON.parse(data);
-            if (Array.isArray(res.components)) {
-                setComponents(res.components);
+            if (Array.isArray(data.components)) {
+                setComponents(data.components);
             } else {
                 console.error('Expected an array of components');
             }
