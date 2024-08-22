@@ -10,6 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../Assets/Images/Logo.png';
 import Image from "next/image";
+import styles from '../../styles/Home.module.css'
 
 
 const Layout = ({ children }) => {
@@ -28,11 +29,7 @@ const Layout = ({ children }) => {
                         className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                         aria-controls="navbar-solid-bg" aria-expanded="false">
                         <span className="sr-only">Open main menu</span>
-                        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 17 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M1 1h15M1 7h15M1 13h15" />
-                        </svg>
+                        <FontAwesomeIcon icon={faBars} />
                     </button>
                     <div className="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
                         <ul id={'nav-links'} className="flex flex-col items-center font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
@@ -138,7 +135,7 @@ const Layout = ({ children }) => {
 
                         <li>
                             <a
-                                href="#"
+                                href="/form/create"
                                 className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
                             >
                                 <FontAwesomeIcon icon={faWindowRestore} className={'w-5'} />
@@ -197,7 +194,7 @@ const Layout = ({ children }) => {
 
                 </div>
             </aside>
-            <main className={'pt-14 pl-64'}>
+            <main className={`pt-14 pl-64 ${styles.body}`}>
                 {children}
             </main>
 

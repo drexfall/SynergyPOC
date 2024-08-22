@@ -4,6 +4,7 @@ import Input from "../../components/FormIO/input";
 import Textarea from "../../components/FormIO/textarea";
 import DateTimeInput from "../../components/FormIO/datetime";
 import RadioGroup from "../../components/FormIO/radio";
+import Layout from "../../components/layout/homeLayout";
 
 export default function Editor() {
     const [components, setComponents] = useState([]);
@@ -212,7 +213,7 @@ export default function Editor() {
     }
 
     return (
-        <>
+        <Layout>
             <Head>
                 <title>Create</title>
                 <link rel="icon" href="/favicon.ico" />
@@ -240,6 +241,6 @@ export default function Editor() {
                     </form>
                 </div>
             </main>
-        </>
+        </Layout>
 );
 }

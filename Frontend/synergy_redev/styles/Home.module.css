@@ -82,6 +82,10 @@
   height: 1em;
 }
 
+.body {
+  height: 110vh;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
