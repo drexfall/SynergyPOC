@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
     return (
         <>
             <nav className="fixed w-full h-16 z-30 border-b border-gray-200 dark:border-gray-600 bg-indigo-200 dark:bg-gray-800">
-                <div className=" flex flex-wrap items-center justify-between py-3 px-4">
+                <div className=" flex flex-wrap justify-between items-center py-3 px-4">
                     <div></div>
                     <button data-collapse-toggle="navbar-solid-bg" type="button"
                         className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
                         </svg>
                     </button>
                     <div className="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
-                        <ul id={'nav-links'} className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
+                        <ul id={'nav-links'} className="flex flex-col items-center font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
                             <li>
                                 <a href="#"
                                     className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
@@ -65,7 +65,7 @@ const Layout = ({ children }) => {
 
 
             <aside id="logo-sidebar"
-                   className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-sky-900 bg-opacity-95 border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+                   className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-indigo-400 bg-opacity-95 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
                    aria-label="Sidebar">
                 <div className={'h-16 bg-indigo-100 px-4 py-1 flex justify-between items-center'}>
                     <a className={'w-6 text-sky-900'}>
@@ -203,7 +203,7 @@ const Layout = ({ children }) => {
 
 
             <footer
-                className="ml-64 bottom-0 left-0 z-50 p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600">
+                className="fixed w-full bottom-0 left-0 z-50 p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600">
                 <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">&copy; 2024 <a href="#"
                     className="hover:underline">Synergy</a>. All Rights Reserved.
                 </span>
