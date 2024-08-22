@@ -6,14 +6,12 @@ import {faChartBar, faPenToSquare, faRectangleList} from "@fortawesome/free-regu
 import Configuration from "../../components/template/Configuration";
 import Dashboard from "../../components/template/Dashboard";
 import Workflow from "../../components/template/Workflow";
-import Table from "../../components/template/Table";
 
 let elementArray = [
-	{name: "General", component: <General />, icon: faPenToSquare},
-	{name: "Configuration", component: <Configuration />, icon: faGear},
-	{name: "Dashboard", component: <Dashboard />, icon: faRectangleList},
-	{name: "Table", component: <Table />, icon: faTable},
-	{name: "Workflow", component: <Workflow />, icon: faChartBar}
+	{component: General, icon: faPenToSquare},
+	{component: Configuration, icon: faGear},
+	{component: Dashboard, icon: faRectangleList},
+	{component: Workflow, icon: faChartBar}
 ];
 
 function TabItem({name, icon, active, group, target}) {
@@ -35,13 +33,13 @@ function TabItem({name, icon, active, group, target}) {
 		})
 	}
 	
-	return <li className={`tab-item me-2 ${active?'active':''}`}
+	return <li className={`tab-item me-2 ${active ? 'active' : ''}`}
 	           data-group={group}
-	           data-target={target}>
-		<button onClick={handleClick}>
-			<FontAwesomeIcon icon={icon}></FontAwesomeIcon>
-			{name}
-		</button>
+	           data-target={target}
+	           onClick={handleClick}>
+		<FontAwesomeIcon icon={icon}></FontAwesomeIcon>
+		{name}
+	
 	</li>
 	
 }
@@ -57,9 +55,9 @@ export default function Manage() {
 						    className="flex text-sm font-medium text-center text-gray-500 dark:text-gray-400">
 							{elementArray.map((element, index) => {
 								return <TabItem icon={element.icon}
-								                name={element.name}
+								                name={element.component.name}
 								                group={"#template-tabs"}
-								                target={`#${element.name}-pane`}
+								                target={`#${element.component.name}-pane`}
 								                active={index === 0} />
 							})}
 						</ul>
@@ -67,10 +65,10 @@ export default function Manage() {
 					<section
 						className={"panes max-w-6xl w-full flex items-center flex-col"}>
 						{elementArray.map((element, index) => {
-							return <div id={element.name + "-pane"}
+							return <div id={element.component.name + "-pane"}
 							            key={index}
-							            className={`pane w-full ${index ===0?'active':''}` }>
-								{element.component}
+							            className={`pane w-full ${index === 0 ? 'active' : ''}`}>
+								{React.createElement(element.component, {})}
 							</div>
 						})}
 					</section>

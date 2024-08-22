@@ -1,30 +1,13 @@
-import {InputField, TextArea} from "../FormIO/form";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEye, faPencil, faRefresh, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {ContextMenu} from "../ContextMenu";
-import {useEffect, useRef} from "react";
-import tableData from "../FormIO/table.json"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPencil, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {useEffect, useRef, useState} from "react";
+import Loader from "./Loader";
 
-const columns = [
-	{
-		header: "Name",
-		field: "Name"
-	},
-	{
-		header: "Age",
-		field: "Age"
-	},
-	{
-		header: "Email",
-		field: "Email"
-	},
-	{
-		header: "Department",
-		field: "DepartmentId_DepartmentName"
-	}
-]
-
-export default function Table() {
+export default function Table({tableData, columns, pageLimit = 10}) {
+	const [pageData, setPageData] = useState([])
+	const [loading, setLoading] = useState(true)
+	const contextMenu = useRef()
 	useEffect(() => {
 		document.addEventListener('click', (event) => {
 			hideContextMenu()
@@ -32,16 +15,34 @@ export default function Table() {
 		document.addEventListener('blur', (event) => {
 			hideContextMenu()
 		})
+		getPageData().then(r=>{
+			setLoading(false)
+		})
 	}, []);
-	const hideContextMenu = () => {
+	
+	async function getPageData(page=1) {
+		let data =[]
+		for (let i = 0; i < pageLimit; i++) {
+			data.push(tableData[i])
+		}
+		setPageData(data)
+	}
+	function hideContextMenu() {
 		const menu = contextMenu.current;
 		menu.classList.add('hidden');
 	}
-	const showContextMenu = () => {
+	
+	function showContextMenu() {
 		const menu = contextMenu.current;
 		menu.classList.remove('hidden');
 	}
-	const contextMenu = useRef()
+	
+	function refresh(event) {
+		setLoading(true)
+		setTimeout(() => {
+			setLoading(false)
+		}, 2000)
+	}
 	
 	const handleContextMenu = (event) => {
 		event.preventDefault()
@@ -49,7 +50,7 @@ export default function Table() {
 		const menu = contextMenu.current;
 		event.currentTarget.classList.add("active")
 		const offsetBox = event.currentTarget.offsetParent
-
+		
 		menu.style.display = 'block';
 		const menuWidth = menu.offsetWidth;
 		const menuHeight = menu.offsetHeight;
@@ -71,46 +72,11 @@ export default function Table() {
 		menu.style.top = posY + 'px';
 		showContextMenu()
 	}
-	return <form
-		className="w-full flex flex-col gap-4 justify-center p-4 bg-gray-800 rounded-lg border-2 border-cyan-950 dark:border-cyan-800 shadow-2xl">
-		
-		<div className={"flex"}><InputField id={"TemplateCode"}
-		                                    name={"Template Code"}
-		                                    placeholder={"Json for your template"}
-			// onType={onCode}
-			// inputRef={codeInput}
-		></InputField>
-			<button type={"button"}
-			        className={"p-2 btn text-cyan-100"}
-				// onClick={onJson}
-			>
-				<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>
-			</button>
-		</div>
-		{/*<div className={"flex"}><InputField id={"Headers"}*/}
-		{/*                                    name={"Headers"}*/}
-		{/*                                    placeholder={"Headers for your table"}*/}
-		{/*	// onType={onCode}*/}
-		{/*	// inputRef={codeInput}*/}
-		{/*></InputField>*/}
-		{/*	<button type={"button"}*/}
-		{/*	        className={"p-2 btn text-cyan-100"}*/}
-		{/*		// onClick={onJson}*/}
-		{/*	>*/}
-		{/*		<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>*/}
-		{/*	</button>*/}
-		{/*</div>*/}
+	return (
 		<div id={"table-wrapper"}>
 			<ContextMenu innerRef={contextMenu}
 			             options={
 				             [
-					             {
-						             label: "View",
-						             icon: <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>,
-						             onClick: () => {
-							             console.log("View")
-						             }
-					             },
 					             {
 						             label: "Edit",
 						             icon: <FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>,
@@ -127,7 +93,7 @@ export default function Table() {
 					             }
 				             ]
 			             }></ContextMenu>
-			<div className=" overflow-x-auto shadow-md sm:rounded-lg">
+			<div className="bg-gray-800 overflow-x-auto shadow-md sm:rounded-lg">
 				<table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
 					<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
@@ -141,10 +107,17 @@ export default function Table() {
 					</tr>
 					</thead>
 					<tbody>
-					{tableData.map((row, index) => {
+					{loading ? <tr>
+						<td className="p-6 text-center select-none cursor-pointer"
+						    colspan={columns.length}>
+							<div className={"w-full flex items-center justify-center"}>
+								<Loader></Loader>
+							</div>
+						</td>
+					</tr> : (pageData.length ? pageData.map((row, index) => {
 						return <tr
-							className="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-linear cursor-pointer"
-							onContextMenu={handleContextMenu} >
+							className={`${index ===pageData.length-1?null:"border-b"} dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-linear cursor-pointer`}
+							onContextMenu={handleContextMenu}>
 							{columns.map((columns, index) => {
 								
 								return <td className="px-6 py-4"
@@ -153,10 +126,19 @@ export default function Table() {
 								</td>
 							})}
 						</tr>
-					})}
+					}) : <tr>
+						<td className="p-6 text-center select-none cursor-pointer"
+						    colspan={columns.length}
+						    onClick={refresh}>
+							<p className={"text-lg font-bold"}>No data found</p>
+						</td>
+					</tr>)
+					}
 					</tbody>
 				</table>
 			</div>
 		</div>
-	</form>
+	)
+	
 }
+			

@@ -1,10 +1,50 @@
+import {InputField, TextArea} from "../FormIO/form";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faClose} from "@fortawesome/free-solid-svg-icons";
+import {faEye, faPencil, faRefresh, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {ContextMenu} from "../ContextMenu";
+import {useEffect, useRef} from "react";
+import tableData from "../FormIO/table.json"
+import Table from "../custom/Table";
 
-export default function  Dashboard(){
+const columns = [
+	{
+		header: "Name",
+		field: "Name"
+	},
+	{
+		header: "Age",
+		field: "Age"
+	},
+	{
+		header: "Email",
+		field: "Email"
+	},
+	{
+		header: "Department",
+		field: "DepartmentId_DepartmentName"
+	}
+]
+
+export default function Dashboard() {
+	
 	return <form
+		className="w-full flex flex-col gap-4 justify-center p-4 bg-gray-900 rounded-lg  shadow-2xl">
 		
-		className="w-full flex flex-col justify-center p-4 bg-cyan-950 rounded-lg border-2 border-cyan-950 dark:border-cyan-800 shadow-2xl">
+		<div className={"flex"}><InputField id={"TemplateCode"}
+		                                    name={"Template Code"}
+		                                    placeholder={"Json for your template"}
+			// onType={onCode}
+			// inputRef={codeInput}
+		></InputField>
+			<button type={"button"}
+			        className={"p-2 btn text-cyan-100"}
+				// onClick={onJson}
+			>
+				<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>
+			</button>
+		</div>
 		
+			<Table tableData={tableData} columns={columns}/>
+
 	</form>
 }
