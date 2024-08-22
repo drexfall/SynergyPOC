@@ -14,35 +14,35 @@ export default function Home() {
 				<link rel="icon"
 				      href="/favicon.ico" />
 			</Head>
-			<Image
-				src={dashboard}
-				alt="Logo"
-				className="w-full h-full"
-			/>
+			{/*<Image*/}
+			{/*	src={dashboard}*/}
+			{/*	alt="Logo"*/}
+			{/*	className="w-full h-full"*/}
+			{/*/>*/}
 
-				{/*<div className={"flex gap-4"}>*/}
-				{/*	<Link href='/portal/manage'>*/}
-				{/*		<button className={"rounded-lg bg-gray-900 p-4 hover:bg-blue-950 transition-all"}>*/}
-				{/*			<h2 className={"text-2xl text-cyan-200"}>*/}
-				{/*				Portals*/}
-				{/*			</h2>*/}
-				{/*		</button>*/}
-				{/*	</Link>*/}
-				{/*	<Link href='/template/manage'>*/}
-				{/*		<button className={"rounded-lg bg-gray-900 p-4 hover:bg-blue-950 transition-all"}>*/}
-				{/*			<h2 className={"text-2xl text-cyan-200"}>*/}
-				{/*				Templates*/}
-				{/*			</h2>*/}
-				{/*		</button>*/}
-				{/*	</Link>*/}
-				{/*	/!*<Link href='/tools/editor'>*!/*/}
-				{/*	/!*	<button className={"rounded-lg bg-gray-900 p-4 hover:bg-blue-950 transition-all"}>*!/*/}
-				{/*	/!*		<h2 className={"text-2xl text-cyan-200"}>*!/*/}
-				{/*	/!*			Open editor*!/*/}
-				{/*	/!*		</h2>*!/*/}
-				{/*	/!*	</button>*!/*/}
-				{/*	/!*</Link>*!/*/}
-				{/*</div>*/}
+				<div className={"flex gap-4"}>
+					<Link href='/portal/manage'>
+						<button className={"rounded-lg bg-gray-900 p-4 hover:bg-blue-950 transition-all"}>
+							<h2 className={"text-2xl text-cyan-200"}>
+								Portals
+							</h2>
+						</button>
+					</Link>
+					<Link href='/template/manage'>
+						<button className={"rounded-lg bg-gray-900 p-4 hover:bg-blue-950 transition-all"}>
+							<h2 className={"text-2xl text-cyan-200"}>
+								Templates
+							</h2>
+						</button>
+					</Link>
+					{/*<Link href='/tools/editor'>*/}
+					{/*	<button className={"rounded-lg bg-gray-900 p-4 hover:bg-blue-950 transition-all"}>*/}
+					{/*		<h2 className={"text-2xl text-cyan-200"}>*/}
+					{/*			Open editor*/}
+					{/*		</h2>*/}
+					{/*	</button>*/}
+					{/*</Link>*/}
+				</div>
 		</div>
 		</Layout>
 	);
