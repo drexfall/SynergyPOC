@@ -38,13 +38,19 @@ module.exports = {
               changeOrigin: true,
               pathRewrite: { '^/dotnet': '' },
               onProxyReq: (proxyReq, req, res) => {
-                // Read the token from the cookie
+                // Reading the token from the cookie
                 const cookies = cookie.parse(req.headers.cookie || '');
                 const token = cookies.token;
 
-                // Add the Authorization header with the bearer token
+                // Adding the Authorization header with the bearer token
                 if (token) {
                   proxyReq.setHeader('Authorization', `Bearer ${token}`);
+                }
+              },
+              onProxyRes: (proxyRes, req, res) => {
+                if (proxyRes.statusCode === 401) {
+                  res.writeHead(401, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ message: 'Unauthorized: Invalid or expired token' }));
                 }
               },
             })
