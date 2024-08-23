@@ -17,14 +17,22 @@ import Image from "next/image";
 import styles from '../../styles/Home.module.css'
 import Link from "next/link";
 import axios from "axios";
+import {useRouter} from "next/router";
+
 
 
 const Layout = ({ children, sidebar = true }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [userName, setUserName] = useState(null);
+    var router = useRouter();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
     };
 
     useEffect(() => {
@@ -46,6 +54,13 @@ const Layout = ({ children, sidebar = true }) => {
             setUserName(null);
         }
     };
+
+    const logout = async () => {
+        const response = await axios.delete('/api/delete');
+        if (response.status === 200) {
+            await router.push('/Login');
+        }
+    }
     return (
         <>
             <nav className="fixed w-full h-16 z-30 shadow dark:shadow-2xl bg-indigo-850 dark:bg-gray-800">
@@ -86,7 +101,8 @@ const Layout = ({ children, sidebar = true }) => {
                             <li>
                                 {userName ? (
                                     <span
-                                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm">
+                                        onClick={toggleDropdown}
+                                        className="rounded-md bg-indigo-600 hover:bg-indigo-800 cursor-pointer px-3 py-2 text-sm font-semibold text-white shadow-sm">
                                         {userName}
                                     </span>
                                 ) : (
@@ -96,6 +112,23 @@ const Layout = ({ children, sidebar = true }) => {
                                     >
                                         Login
                                     </Link>
+                                )}
+                                {isDropdownOpen && (
+                                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-20">
+                                        <button
+                                            type={"button"}
+                                            className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            Profile
+                                        </button>
+                                        <button
+                                            type={"button"}
+                                            className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            onClick={logout}
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
                                 )}
                             </li>
                         </ul>
