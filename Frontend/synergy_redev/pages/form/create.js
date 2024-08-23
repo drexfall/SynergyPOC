@@ -1,17 +1,23 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Input from "../../components/FormIO/input";
 import Textarea from "../../components/FormIO/textarea";
 import DateTimeInput from "../../components/FormIO/datetime";
 import RadioGroup from "../../components/FormIO/radio";
 import Layout from "../../components/layout/homeLayout";
+import {InputField, TextArea} from "../../components/FormIO/form";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faRefresh} from "@fortawesome/free-solid-svg-icons";
+import Loader from "../../components/custom/Loader";
 
 export default function Editor() {
     const [components, setComponents] = useState([]);
-
+    const [templateCode, setTemplateCode] = useState([])
+    const templateInput = useRef();
     useEffect(() => {
-        getJson('NEW_USERS');
-    }, []);
+        setComponents([])
+        getJson();
+    }, [templateCode]);
 
     async function onSubmit(event) {
         event.preventDefault()
@@ -27,9 +33,9 @@ export default function Editor() {
     }
 
 
-    async function getJson(templateId) {
+    async function getJson() {
         try {
-            const response = await fetch('/forms/GetTemplateJson?templateCode=' + templateId, {
+            const response = await fetch('/forms/GetTemplateJson?templateCode=' + templateCode, {
                 method: 'GET',
             });
 
@@ -53,7 +59,7 @@ export default function Editor() {
             case 'textfield':
                 return (
                     <div key={component.key} className="mb-4">
-                        <Input
+                        <InputField
                             label={
                                 <>
                                     {component.label}
@@ -72,7 +78,7 @@ export default function Editor() {
             case 'number':
                 return (
                     <div key={component.key} className="mb-4">
-                        <Input
+                        <InputField
                             label={
                                 <>
                                     {component.label}
@@ -91,8 +97,8 @@ export default function Editor() {
             case 'password':
                 return (
                     <div key={component.key} className="mb-4">
-                        <Input
-                            label= {
+                        <InputField
+                            label={
                                 <>
                                     {component.label}
                                     {component.validate?.required && <span className="text-red-500"> *</span>}
@@ -147,7 +153,7 @@ export default function Editor() {
             case 'textarea':
                 return (
                     <div key={component.key} className="mb-4">
-                        <Textarea
+                        <TextArea
                             label={
                                 <>
                                     {component.label}
@@ -216,29 +222,45 @@ export default function Editor() {
         <Layout>
             <Head>
                 <title>Create</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico"/>
             </Head>
 
             <main>
-                <div className="m-5">
-                    {/* <button
-                        type="button"
-                        className="flex justify-center py-2 px-4 border border-transparent rounded-md
-                        shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none
-                        focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-7"
-                        onClick={() => getJson('7e4cb000-2a1b-4a4b-ae94-1f0e205ea79a')}
-                    > Get Form from JSON </button> */}
-                    <form onSubmit={onSubmit}>
-                        {Array.isArray(components) && components.length > 0 ? (
+                <h2 className={"text-2xl font-semibold p-4 mt-2"}>Template Editor</h2>
+                <div className="p-4 flex flex-col gap-4">
+                    <div className={"flex gap-4"}>
+                        <InputField inputRef={templateInput} id={"template-code"} name={"Template Code"}></InputField>
+                        <button
+                            type="button"
+                            className={"primary"}
+                            onClick={() => {
+                                setTemplateCode(templateInput.current.value)
+                            }}
+                        ><FontAwesomeIcon className={"w-4"} icon={faRefresh}/>
+                        </button>
+                    </div>
+                    <hr className={"m-2 me-0"}/>
+                    {templateCode ?
+                        Array.isArray(components) && components.length > 0 ? (
                             <>
-                                {components.map(component => renderComponent(component))}
+                                <form onSubmit={onSubmit} className={"flex flex-col gap-4"}>
+                                    {components.map(component => renderComponent(component))}
+                                    <hr className={"my-2"}/>
+                                    <div className={"inline-flex gap-4 ms-auto"}>
+                                        <button type={"reset"} className={"secondary"}>Reset</button>
+                                        <button type={"submit"} className={"primary"}>Save</button>
+                                    </div>
+                                </form>
                             </>
 
                         ) : (
-                            <p className={'text-gray-950 dark:text-gray-400'}>Loading ...</p>
-                        )}
+                            <div>
+                                <Loader/>
+                            </div>
+                        )
+                        : <p>Please enter a template code</p>
+                    }
 
-                    </form>
                 </div>
             </main>
         </Layout>

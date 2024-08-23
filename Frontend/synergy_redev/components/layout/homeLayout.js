@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
 
     return (
         <>
-            <nav className="fixed w-full h-16 z-30 shadow dark:shadow-2xl bg-indigo-850 dark:bg-gray-800">
+            <nav className="bg-white fixed w-full h-16 z-30 shadow dark:shadow-2xl bg-indigo-850 dark:bg-gray-800">
                 <div className=" flex flex-wrap justify-between items-center py-3 px-4">
 
                     <div className={"flex gap-4 "}>
