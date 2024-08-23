@@ -1,20 +1,33 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const path = require('path');
 const cookie = require('cookie');
+const axios = require('axios');
 
 module.exports = {
   async rewrites() {
     return [
       {
-        source: '/dotnet/:path*',
-        destination: 'https://localhost:44326/:path*', // Proxy to Backend
+        source: '/auth/:path*',
+        destination: 'https://localhost:44326/:path*',
       },
+      {
+        source: '/forms/:path*',
+        destination: 'https://localhost:44325/:path*',
+      }
     ];
   },
   async headers() {
     return [
       {
-        source: '/dotnet/:path*',
+        source: '/auth/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+        ],
+      },
+      {
+        source: '/forms/:path*',
         headers: [
           { key: 'Access-Control-Allow-Origin', value: '*' },
           { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
@@ -32,11 +45,11 @@ module.exports = {
         ...config.devServer,
         before: (app) => {
           app.use(
-            '/dotnet',
+              ['/auth', '/forms'],
             createProxyMiddleware({
               target: 'https://localhost:44326',
               changeOrigin: true,
-              pathRewrite: { '^/dotnet': '' },
+              pathRewrite: { '^/forms': '' },
               onProxyReq: (proxyReq, req, res) => {
                 const cookies = cookie.parse(req.headers.cookie || '');
                 const token = cookies.token;

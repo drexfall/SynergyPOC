@@ -10,7 +10,7 @@ export default function Editor() {
     const [components, setComponents] = useState([]);
 
     useEffect(() => {
-        getJson('7e4cb000-2a1b-4a4b-ae94-1f0e205ea79a');
+        getJson('NEW_USERS');
     }, []);
 
     async function onSubmit(event) {
@@ -29,7 +29,7 @@ export default function Editor() {
 
     async function getJson(templateId) {
         try {
-            const response = await fetch('/dotnet/GetTemplateJson?templateId=' + templateId, {
+            const response = await fetch('/forms/GetTemplateJson?templateCode=' + templateId, {
                 method: 'GET',
             });
 
@@ -235,12 +235,12 @@ export default function Editor() {
                             </>
 
                         ) : (
-                            <p className={'text-gray-950 dark:text-gray-400'}>No components to display</p>
+                            <p className={'text-gray-950 dark:text-gray-400'}>Loading ...</p>
                         )}
 
                     </form>
                 </div>
             </main>
         </Layout>
-);
+    );
 }

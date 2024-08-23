@@ -9,8 +9,14 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = express();
 
-  server.use('/dotnet', createProxyMiddleware({
+  server.use('/auth', createProxyMiddleware({
     target: 'https://localhost:44326',
+    changeOrigin: true,
+    secure: false,
+  }));
+
+  server.use('/forms', createProxyMiddleware({
+    target: 'https://localhost:44325',
     changeOrigin: true,
     secure: false,
   }));
