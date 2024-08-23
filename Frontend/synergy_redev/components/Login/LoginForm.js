@@ -6,9 +6,11 @@ import axios from 'axios';
 import Image from 'next/image'
 import Logo from '../../Assets/Images/Logo.png';
 import style from './Login.module.css';
+import { useRouter } from "next/router";
 
 const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
   
     const formik = useFormik({
       initialValues: {
@@ -40,10 +42,10 @@ const LoginForm = () => {
       onSubmit: async (values) => {
         console.log(values)
         try {
-          const response = await axios.post('/dotnet/api/Authenticate/AuthenticateUser?email=' + values.email + '&password=' + values.password);
+          const response = await axios.post('/auth/api/Authenticate/AuthenticateUser?email=' + values.email + '&password=' + values.password);
           console.log(response.data);
           await axios.post('/api/insertUser', response.data);
-          // Handle success (e.g., redirect, show a success message)
+          await router.push('/');
         } catch (error) {
           console.error(error);
           // Handle error (e.g., show an error message)

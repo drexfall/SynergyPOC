@@ -1,8 +1,12 @@
 import LoginForm from "../../components/Login/LoginForm"
+import Layout from "../../components/layout/homeLayout";
 
 const Login = () => {
     return (
-        <LoginForm />
+        <Layout sidebar={false}>
+            <LoginForm />
+        </Layout>
+
     )
 }
 
