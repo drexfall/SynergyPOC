@@ -168,7 +168,7 @@ export default function Editor() {
                 );
 
             case 'datagrid':
-                return <DataGridComponent key={component.key} component={component} renderComponen={renderComponent} />;
+                return <DataGridComponent key={component.key} component={component} renderComponent={renderComponent} />;
 
             case 'datetime':
                 const disableDates = [];
