@@ -23,7 +23,7 @@ import {useRouter} from "next/router";
 
 const Layout = ({ children, sidebar = true }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(true);
     const [userName, setUserName] = useState(null);
     var router = useRouter();
 
@@ -36,6 +36,7 @@ const Layout = ({ children, sidebar = true }) => {
     };
 
     useEffect(() => {
+        (!sidebar) ? setIsMenuOpen(sidebar) : null;
         checkUser();
     }, []);
 
@@ -69,7 +70,7 @@ const Layout = ({ children, sidebar = true }) => {
                     <div className={"flex gap-4 "}>
                         <button data-collapse-toggle="navbar-solid-bg" type="button"
                                 className="p-2 text-sm text-indigo-900 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                                aria-controls="navbar-solid-bg" aria-expanded="false">
+                                aria-controls="navbar-solid-bg" aria-expanded="false" onClick={toggleMenu}>
                             <FontAwesomeIcon className={"size-4"} icon={faBars}/>
                         </button>
                         <div
@@ -136,7 +137,7 @@ const Layout = ({ children, sidebar = true }) => {
                 </div>
             </nav>
 
-            {sidebar && (
+            {isMenuOpen && (
                 <aside id="logo-sidebar"
                        className="fixed top-16 left-0 z-20 w-64 p-4 h-screen transition-transform -translate-x-full bg-indigo-950 dark:bg-gray-900  bg-opacity-95 sm:translate-x-0"
                        aria-label="Sidebar">
@@ -290,13 +291,13 @@ const Layout = ({ children, sidebar = true }) => {
                 </aside>
             )}
 
-            <main className={`pt-16 ${sidebar && ('pl-64')} ${styles.body}`}>
+            <main className={`pt-16 ${isMenuOpen && ('pl-64')} ${styles.body}`}>
                 {children}
             </main>
 
 
             <footer
-                className="sticky w-full z-50 p-4 bg-indigo-950 shadow md:flex md:items-center md:justify-center md:p-6 dark:bg-gray-800 dark:border-gray-600">
+                className="w-full bottom-0 z-50 p-4 bg-indigo-950 shadow md:flex md:items-center md:justify-center md:p-6 dark:bg-gray-800 dark:border-gray-600">
                 <span
                     className="text-sm text-indigo-50 text-opacity-80 sm:text-center dark:text-gray-400">&copy; 2024 <a
                     href="#"

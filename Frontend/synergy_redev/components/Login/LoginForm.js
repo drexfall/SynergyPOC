@@ -47,6 +47,9 @@ const LoginForm = () => {
           await axios.post('/api/insertUser', response.data);
           await router.push('/');
         } catch (error) {
+          if (error.response.status === 401) {
+            alert('Invalid email and password. Please try again.')
+          }
           console.error(error);
           // Handle error (e.g., show an error message)
         }
