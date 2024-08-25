@@ -10,10 +10,8 @@ const DataGridComponent = ({ component, renderComponent }) => {
     };
 
     const removeRow = (id) => {
-        if (id !== 'row-index-0') {
             const elem = document.getElementById(id);
             elem.remove();
-        }
     };
 
     return (
