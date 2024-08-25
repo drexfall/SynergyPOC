@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 
-const DataGridComponent = ({ component, renderComponen }) => {
+const DataGridComponent = ({ component, renderComponent }) => {
     const [rows, setRows] = useState([{ DegreeName: '', Percentage: '' }]);
 
     const addRow = () => {
@@ -43,7 +43,7 @@ const DataGridComponent = ({ component, renderComponen }) => {
                             {component.components.map((comp) => (
                                 comp.key !== 'ParentId' && comp.key !== 'Id' && (
                                     <td key={comp.key} className="px-2 pt-3">
-                                        {renderComponen(comp, false)}
+                                        {renderComponent(comp, false)}
                                     </td>
                                 )
                             ))}
