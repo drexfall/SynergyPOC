@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from "../../components/FormIO/input";
 import Textarea from "../../components/FormIO/textarea";
 import DateTimeInput from "../../components/FormIO/datetime";
@@ -7,6 +7,8 @@ import RadioGroup from "../../components/FormIO/radio";
 import Layout from "../../components/layout/homeLayout";
 import Table from "../../components/custom/Table";
 import DataGridComponent from "../../components/FormIO/datagrid";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 
 export default function Editor() {
     const [components, setComponents] = useState([]);
@@ -50,13 +52,13 @@ export default function Editor() {
         }
     }
 
-    function renderComponent(component) {
+    function renderComponent(component, showLabel = true) {
         switch (component.type) {
             case 'textfield':
                 return (
                     <div key={component.key} className="mb-4">
                         <Input
-                            label={
+                            label={ showLabel &&
                                 <>
                                     {component.label}
                                     {component.validate?.required && <span className="text-red-500"> *</span>}
@@ -75,7 +77,7 @@ export default function Editor() {
                 return (
                     <div key={component.key} className="mb-4">
                         <Input
-                            label={
+                            label={ showLabel &&
                                 <>
                                     {component.label}
                                     {component.validate?.required && <span className="text-red-500"> *</span>}
@@ -94,7 +96,7 @@ export default function Editor() {
                 return (
                     <div key={component.key} className="mb-4">
                         <Input
-                            label= {
+                            label= { showLabel &&
                                 <>
                                     {component.label}
                                     {component.validate?.required && <span className="text-red-500"> *</span>}
@@ -114,7 +116,7 @@ export default function Editor() {
                 return (
                     <div key={component.key} className="mb-4">
                         <RadioGroup
-                            label={component.label}
+                            label={showLabel && component.label}
                             options={component.values}
                             name={component.key}
                             required={component.validate?.required}
@@ -127,7 +129,7 @@ export default function Editor() {
                     <div key={component.key} className="mb-4">
                         <div className="flex items-center">
                             <Input
-                                label={
+                                label={ showLabel &&
                                     <>
                                         {component.label}
                                         {component.validate?.required && <span className="text-red-500"> *</span>}
@@ -150,7 +152,7 @@ export default function Editor() {
                 return (
                     <div key={component.key} className="mb-4">
                         <Textarea
-                            label={
+                            label={ showLabel &&
                                 <>
                                     {component.label}
                                     {component.validate?.required && <span className="text-red-500"> *</span>}
@@ -166,7 +168,7 @@ export default function Editor() {
                 );
 
             case 'datagrid':
-                return <DataGridComponent key={component.key} component={component} />;
+                return <DataGridComponent key={component.key} component={component} renderComponen={renderComponent} />;
 
             case 'datetime':
                 const disableDates = [];
@@ -179,7 +181,7 @@ export default function Editor() {
                 return (
                     <div key={component.key} className="mb-4">
                         <DateTimeInput
-                            label={
+                            label={ showLabel &&
                                 <>
                                     {component.label}
                                     {component.validate?.required && <span className="text-red-500"> *</span>}
@@ -218,65 +220,11 @@ export default function Editor() {
         }
     }
 
-    const DataGridComponent = ({ component }) => {
-        const [rows, setRows] = useState([{ DegreeName: '', Percentage: '' }]);
-
-        const addRow = () => {
-            setRows([...rows, { DegreeName: '', Percentage: '' }]);
-        };
-
-        const removeRow = (index) => {
-            const newRows = rows.filter((_, i) => i !== index);
-            setRows(newRows);
-        };
-
-        const handleInputChange = (index, key, value) => {
-            const newRows = rows.map((row, i) => (i === index ? { ...row, [key]: value } : row));
-            setRows(newRows);
-        };
-
-        const fields = component.components.length - 1;
-
-        return (
-            <div className="p-4">
-                <div className="font-bold mb-2">{component.label}</div>
-                <div className={`grid grid-cols-${fields} gap-4 mb-4`}>
-                    {component.components.map((comp) => (
-                        comp.key !== 'ParentId' && comp.key !== 'Id' && (
-                            <div key={comp.key} className="font-semibold">
-                                {comp.label}
-                            </div>
-                        )
-                    ))}
-                </div>
-                {rows.map((row, rowIndex) => (
-                    <div key={rowIndex} className={`grid grid-cols-${fields} gap-4 mb-4 items-center`}>
-                        {component.components.map((comp) => (
-                            comp.key !== 'ParentId' && comp.key !== 'Id' && (
-                                <div key={comp.key}>
-                                    {renderComponent(comp, row[comp.key], (e) => handleInputChange(rowIndex, comp.key, e.target.value))}
-                                </div>
-                            )
-                        ))}
-                        <div>
-                            <button type={"button"} onClick={() => removeRow(rowIndex)} className="text-red-500">Remove</button>
-                        </div>
-                        <div className="flex items-center">
-                            {rowIndex === rows.length - 1 && (
-                                <button type={"button"} onClick={addRow} className="mr-2 text-green-500">Add</button>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        );
-    };
-
     return (
         <Layout>
             <Head>
                 <title>Create</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico"/>
             </Head>
 
             <main>
