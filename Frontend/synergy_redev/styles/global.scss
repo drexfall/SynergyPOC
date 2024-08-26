@@ -16,7 +16,7 @@ body {
   Droid Sans,
   Helvetica Neue,
   sans-serif;
-  @apply p-0 m-0 bg-white  dark:bg-gray-950
+  @apply p-0 m-0 bg-primary-50 dark:bg-gray-950
 }
 
 a {
@@ -37,3 +37,4 @@ h1,h2,h3,h4,h5,h6{
 p{
     @apply text-cyan-900 dark:text-gray-200 text-opacity-85 dark:text-opacity-80
 }
+

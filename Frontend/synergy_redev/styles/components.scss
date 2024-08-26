@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "components/buttons";
+@import "components/button";
+@import "components/form";
 .tab-item {
   @apply transition-all cursor-pointer inline-flex gap-2 items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300;
 
@@ -23,4 +24,7 @@
 
   .context-menu-item {
   }
+}
+hr{
+  @apply dark:opacity-30 my-1
 }

@@ -1,53 +1,80 @@
-import React, {useRef} from 'react';
+import React, { useRef, useState } from "react";
+import Button from "../custom/Button";
 
-export function InputField({id, name, type, placeholder, required = false, inputRef = useRef()}) {
-	return <div className={"w-full flex gap-4 items-center justify-between"}>
-		{name?
-		<label htmlFor={id}
-		       className="font-semibold ps-2  text-sm text-indigo-950 dark:text-cyan-100">{name}</label>
-			:
-		null
-		}
-		<input type={type}
-		       id={id}
-		       name={id}
-		       className={"w-1/2 border border-indigo-700 dark:border-indigo-600  dark:bg-gray-900 text-gray-900 text-sm rounded focus:ring-indigo-900 focus:border-indigo-900 block p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
-		       required={required}
-			   ref={inputRef}
-		placeholder={placeholder}
-		/>
-	</div>
+export function InputField({
+  id,
+  label,
+  type,
+  placeholder = "",
+  required = false,
+  button,
+}) {
+  const [error, setError] = useState(null);
+  const inputRef = useRef();
+  const inputClass =
+    "w-full invalid:text-red-500 group-hover:text-primary-800 dark:group-hover:text-primary-200 text-primary-600 dark:text-secondary-300 focus:text-primary-800 dark:focus:text-primary-200 peer rounded border-none bg-inherit p-3 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 transition-all duration-300";
+  const validateInput = () => {
+    if (inputRef.current.validity.valid) {
+      return setError(null);
+    }
+    setError(inputRef.current.validationMessage);
+  };
+  const handleSubmit = () => {
+    if (button.submit) {
+      if (!inputRef.current.validity.valid) {
+        setError(inputRef.current.validationMessage);
+        return;
+      }
+      button.submit(inputRef.current.value);
+    }
+  };
+  return (
+    <div className={"flex gap-4 w-full"}>
+      <div className={`flex flex-col w-full gap-2 ${error ? "mb-4" : ""}`}>
+        <div
+          className={
+            "group relative block rounded border border-primary-400 dark:border-secondary-700 bg-primary-50 shadow-sm hover:border-primary-600 dark:hover:border-primary-400 focus-within:border-primary-600 dark:focus-within:border-primary-400 focus-within:ring-0 dark:bg-gray-950 transition-all duration-300"
+          }
+        >
+          {type === "textarea" ? (
+            <textarea
+              id={id}
+              name={id}
+              className={inputClass}
+              required={required}
+              placeholder={placeholder}
+              ref={inputRef}
+              onChange={validateInput}
+            ></textarea>
+          ) : (
+            <input
+              type={type}
+              id={id}
+              name={id}
+              className={inputClass}
+              required={required}
+              ref={inputRef}
+              placeholder={placeholder}
+              onChange={validateInput}
+            />
+          )}
+
+          {label ? (
+            <label
+              htmlFor={id}
+              className={
+                "group-hover:text-primary-600 dark:group-hover:text-primary-400 text-primary-400 dark:text-secondary-500 pointer-events-none absolute start-1.5 top-0 -translate-y-1/2 bg-inherit p-1.5 text-xs peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-primary-600  peer-focus:dark:text-primary-400 transition-all duration-100 "
+              }
+            >
+              {label}
+            </label>
+          ) : null}
+          <span className={`flex gap-2 absolute ${error ? "p-2" : null}`}>
+            <p className={`text-red-500 text-xs`}>{error}</p>
+          </span>
+        </div>
+      </div>
+      {button ? <Button {...button} onClick={handleSubmit}></Button> : null}
+    </div>
+  );
 }
-
-
-export function TextArea({id, name, placeholder, required = false, onType, inputRef}) {
-	const _onType = (event) => {
-		onType?onType(event):null
-	}
-	return <div className={"w-full flex gap-4 items-center justify-between" }>
-		<label htmlFor={id}
-		       className="font-semibold ps-2 w-2/12 text-sm text-indigo-950 dark:text-cyan-100">{name}</label>
-		<textarea
-			id={id}
-			name={id}
-			className={"w-1/2 border border-indigo-700 dark:border-indigo-600  dark:bg-gray-900 text-gray-900 text-sm rounded  focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
-			required={required}
-			onChange={_onType}
-		ref={inputRef}></textarea>
-	</div>
-}
-
-// export function Input({label, className, ...props}) {
-// 	return (
-// 		<div className="mb-4">
-// 			{label && <label className="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2">{label}</label>}
-// 			<input
-// 				className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700
-//                 leading-tight focus:outline-none focus:shadow-outline
-//                 ${className}`}
-// 				{...props}
-// 			/>
-// 		</div>
-// 	);
-// }
-//
