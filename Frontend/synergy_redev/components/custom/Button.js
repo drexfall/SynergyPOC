@@ -1,17 +1,24 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { faArrowDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 export default function Button(props) {
-  console.log(props);
   return (
     <button
-      className={
-        "bg-transparent rounded-md px-3.5 py-2.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-100 transition-all"
-      }
+      className={`${props.className} flex rounded-md px-3.5 py-2.5 text-sm font-semibold  transition-all ${props.type === "dropdown" ? "bg-primary-600 bg-opacity-65 text-primary-100 gap-2 justify-center" : "bg-transparent text-indigo-600 hover:bg-indigo-100"}`}
       id={props.id}
       onClick={props.onClick}
     >
-      {
+      {props.type === "dropdown" ? (
+        <>
+          {props.text ? <span>{props.text}</span> : "Select"}
+
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            className={"w-4 aspect-square"}
+          ></FontAwesomeIcon>
+        </>
+      ) : (
         <>
           {props.icon ? (
             <FontAwesomeIcon
@@ -21,7 +28,7 @@ export default function Button(props) {
           ) : null}
           {props.text ? <span>{props.text}</span> : null}
         </>
-      }
+      )}
     </button>
   );
 }

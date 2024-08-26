@@ -45,6 +45,7 @@ export default function Editor() {
         UserId: "45bba746-3309-49b7-9c03-b5793369d73c",
         PortalId: template.PortalId,
         TemplateCode: template.Code,
+        DataAction: 1,
         Json: JSON.stringify(jsonData),
       }),
     });
@@ -200,14 +201,22 @@ export default function Editor() {
                 submit: getTemplate,
               }}
             ></InputField>
-            <Select
-              options={[
-                {
-                  label: "Hello",
-                  value: "Hey",
-                },
-              ]}
-            ></Select>
+            {/*<Select*/}
+            {/*  options={[*/}
+            {/*    {*/}
+            {/*      label: "Hello",*/}
+            {/*      value: "Hey",*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      label: "Hello",*/}
+            {/*      value: "Hey",*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      label: "Hello",*/}
+            {/*      value: "Hey",*/}
+            {/*    },*/}
+            {/*  ]}*/}
+            {/*></Select>*/}
           </div>
           <hr />
           {loading ? (
