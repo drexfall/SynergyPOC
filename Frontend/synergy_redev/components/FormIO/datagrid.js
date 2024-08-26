@@ -41,7 +41,7 @@ const DataGridComponent = ({ component, renderComponent }) => {
                             {component.components.map((comp) => (
                                 comp.key !== 'ParentId' && comp.key !== 'Id' && (
                                     <td key={comp.key} className="px-2 pt-3">
-                                        {renderComponent(comp, false)}
+                                        {renderComponent(comp)}
                                     </td>
                                 )
                             ))}
@@ -49,7 +49,7 @@ const DataGridComponent = ({ component, renderComponent }) => {
                                 <button
                                     type="button"
                                     onClick={() => removeRow(`row-index-${rowIndex}`)}
-                                    className="flex justify-center items-center shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none py-3 mb-1 gap-2"
+                                    className="flex justify-center items-center shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none rounded p-3 mb-1 gap-2"
                                 >
                                     <FontAwesomeIcon className={'w-3'} icon={faTrash} />
                                 </button>
@@ -61,7 +61,7 @@ const DataGridComponent = ({ component, renderComponent }) => {
                 <button
                     type="button"
                     onClick={addRow}
-                    className="flex justify-center items-center shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none mb-7 mt-2 gap-2"
+                    className="flex justify-center items-center shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none rounded px-3 py-2 mb-7 mt-2 gap-2"
                 >
                     <FontAwesomeIcon className={'w-4'} icon={faPlus}/><span>Add</span>
                 </button>
