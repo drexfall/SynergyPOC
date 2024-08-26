@@ -20,9 +20,11 @@ export default function Editor() {
   const [template, setTemplate] = useState(null);
 
   useEffect(() => {
+    setLoading(true);
     let templateId = router.query.templateId;
     axios.get(`/forms/GetFormTemplates?id=${templateId}`).then((response) => {
       setTemplate(response.data);
+      setLoading(false);
     });
   }, []);
   useEffect(() => {
@@ -124,8 +126,14 @@ export default function Editor() {
           </div>
         );
 
-      case 'datagrid':
-        return <DataGridComponent key={component.key} component={component} renderComponent={renderComponent} />;
+      case "datagrid":
+        return (
+          <DataGridComponent
+            key={component.key}
+            component={component}
+            renderComponent={renderComponent}
+          />
+        );
 
       case "datetime":
         const disableDates = [];
