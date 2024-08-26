@@ -83,7 +83,7 @@
 }
 
 .body {
-  height: 110vh;
+  min-height: 110vh;
 }
 
 @media (max-width: 600px) {

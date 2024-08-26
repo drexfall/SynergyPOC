@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const users = await db.all('SELECT * FROM UserContext WHERE Token = ?', [token]);
+    const users = await db.get('SELECT * FROM UserContext WHERE Token = ?', [token]);
 
     if (users.length === 0) {
       return res.status(404).json({ error: 'No users found with the provided token' });
