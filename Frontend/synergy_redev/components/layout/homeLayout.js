@@ -316,7 +316,7 @@ const Layout = ({ children, sidebar = true }) => {
         {children}
       </main>
 
-      <footer className="fixed bottom-0 z-50 w-full bg-indigo-950 p-4 shadow md:flex md:items-center md:justify-center md:p-6 dark:border-gray-600 dark:bg-gray-800">
+      <footer className="bottom-0 z-50 w-full bg-indigo-950 p-4 shadow md:flex md:items-center md:justify-center md:p-6 dark:border-gray-600 dark:bg-gray-800">
         <span className="text-sm text-indigo-50 text-opacity-80 sm:text-center dark:text-gray-400">
           &copy; 2024{" "}
           <a href="#" className="hover:underline">
