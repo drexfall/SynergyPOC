@@ -11,6 +11,7 @@ import Button from "../../components/custom/Button";
 import { Select } from "../../components/FormIO/Select";
 import { useRouter } from "next/router";
 import axios from "axios";
+import DataGridComponent from "../../components/FormIO/datagrid";
 
 export default function Editor() {
   const router = useRouter();
@@ -122,6 +123,9 @@ export default function Editor() {
             </div>
           </div>
         );
+
+      case 'datagrid':
+        return <DataGridComponent key={component.key} component={component} renderComponent={renderComponent} />;
 
       case "datetime":
         const disableDates = [];

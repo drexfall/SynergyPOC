@@ -12,7 +12,7 @@ module.exports = {
       },
       {
         source: '/forms/:path*',
-        destination: 'https://localhost:44326/:path*',
+        destination: 'https://localhost:44325/:path*',
       }
     ];
   },

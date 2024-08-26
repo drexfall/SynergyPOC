@@ -8,20 +8,20 @@ import Layout from '../components/layout/homeLayout';
 export default function Home() {
 	return (
 		<Layout>
-		<div className={styles.container}>
-			<Head>
-				<title>Synergy Platform</title>
-				<link rel="icon"
-				      href="/favicon.ico" />
-			</Head>
-			{/*<Image*/}
-			{/*	src={dashboard}*/}
-			{/*	alt="Logo"*/}
-			{/*	className="w-full h-full"*/}
-			{/*/>*/}
+			<div className={styles.container}>
+				<Head>
+					<title>Synergy Platform</title>
+					<link rel="icon"
+						  href="/favicon.ico"/>
+				</Head>
+				{/*<Image*/}
+				{/*	src={dashboard}*/}
+				{/*	alt="Logo"*/}
+				{/*	className="w-full h-full"*/}
+				{/*/>*/}
 
 
-		</div>
+			</div>
 		</Layout>
 	);
 }
