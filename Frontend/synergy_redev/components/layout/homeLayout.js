@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {useEffect, useState} from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAdd,
   faBars,
@@ -9,154 +7,75 @@ import {
   faGears,
   faHome,
   faTable,
-  // faUser,
-  // faUsers,
   faWindowMaximize,
   faWindowRestore,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import Logo from "../../Assets/Images/Logo.png";
-import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import axios from "axios";
-import {useRouter} from "next/router";
-
-
+import { useRouter } from "next/router";
 
 const Layout = ({ children, sidebar = true }) => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(true);
-    const [userName, setUserName] = useState(null);
-    var router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [userName, setUserName] = useState(null);
+  var router = useRouter();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
-    useEffect(() => {
-        (!sidebar) ? setIsMenuOpen(sidebar) : null;
-        checkUser();
-    }, []);
+  useEffect(() => {
+    !sidebar ? setIsMenuOpen(sidebar) : null;
+    checkUser();
+  }, []);
 
-    const checkUser = async () => {
-        try {
-            const response = await axios.get('/api/user');
-            var user = response.data;
-            console.log(user);
-            if (user) {
-                setUserName(user.Name);
-            } else {
-                setUserName(null);
-            }
-        } catch (error) {
-            console.error('Error checking user:', error);
-            setUserName(null);
-        }
-    };
-
-    const logout = async () => {
-        const response = await axios.delete('/api/delete');
-        if (response.status === 200) {
-            await router.push('/Login');
-        }
+  const checkUser = async () => {
+    try {
+      const response = await axios.get("/api/user");
+      var user = response.data;
+      console.log(user);
+      if (user) {
+        setUserName(user.Name);
+      } else {
+        setUserName(null);
+      }
+    } catch (error) {
+      console.error("Error checking user:", error);
+      setUserName(null);
     }
-    return (
-        <>
-            <nav className="fixed w-full h-16 z-30 shadow dark:shadow-2xl bg-white dark:bg-gray-800">
-                <div className=" flex flex-wrap justify-between items-center py-3 px-4">
+  };
 
-                    <div className={"flex gap-4 "}>
-                        <button data-collapse-toggle="navbar-solid-bg" type="button"
-                                className="p-2 text-sm text-indigo-900 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                                aria-controls="navbar-solid-bg" aria-expanded="false" onClick={toggleMenu}>
-                            <FontAwesomeIcon className={"size-4"} icon={faBars}/>
-                        </button>
-                        <div
-                            className={'flex justify-start gap-4 items-center'}>
-                            <p className={"font-semibold text-2xl  text-indigo-950 dark:text-indigo-100"}>Synergy</p>
-                        </div>
-                    </div>
-                    <div className="hidden w-full md:block md:w-auto mt-2" id="navbar-solid-bg">
-
-                        <ul id={'nav-links'}
-                            className="flex flex-col items-center font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
-                            <li>
-                                <Link href="/"
-                                   className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-indigo-900 md:font-bold md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
-                                   aria-current="page">Home</Link>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Services</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">About</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
-                            </li>
-                            <li>
-                                {userName ? (
-                                    <span
-                                        onClick={toggleDropdown}
-                                        className="rounded-md bg-indigo-600 hover:bg-indigo-800 cursor-pointer px-3 py-2 text-sm font-semibold text-white shadow-sm">
-                                        {userName}
-                                    </span>
-                                ) : (
-                                    <Link
-                                        href="/Login"
-                                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                    >
-                                        Login
-                                    </Link>
-                                )}
-                                {isDropdownOpen && (
-                                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-20">
-                                        <button
-                                            type={"button"}
-                                            className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            Profile
-                                        </button>
-                                        <button
-                                            type={"button"}
-                                            className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            onClick={logout}
-                                        >
-                                            Logout
-                                        </button>
-                                    </div>
-                                )}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+  const logout = async () => {
+    const response = await axios.delete("/api/delete");
+    if (response.status === 200) {
+      await router.push("/Login");
+    }
+  };
   return (
     <>
-      <nav className="fixed z-30 h-16 w-full shadow shadow-indigo-200 dark:bg-gray-800 dark:shadow-2xl">
-        <div className="flex flex-wrap items-center justify-between px-4 py-3">
-          <div className={"flex gap-4"}>
+      <nav className="fixed w-full h-16 z-30 shadow dark:shadow-2xl bg-white dark:bg-gray-800">
+        <div className=" flex flex-wrap justify-between items-center py-3 px-4">
+          <div className={"flex gap-4 "}>
             <button
               data-collapse-toggle="navbar-solid-bg"
               type="button"
-              className="rounded-lg p-2 text-sm text-indigo-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="p-2 text-sm text-indigo-900 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               aria-controls="navbar-solid-bg"
               aria-expanded="false"
+              onClick={toggleMenu}
             >
               <FontAwesomeIcon className={"size-4"} icon={faBars} />
             </button>
-            <div className={"flex items-center justify-start gap-4"}>
+            <div className={"flex justify-start gap-4 items-center"}>
               <p
                 className={
-                  "text-2xl font-semibold text-indigo-950 dark:text-indigo-100"
+                  "font-semibold text-2xl  text-indigo-950 dark:text-indigo-100"
                 }
               >
                 Synergy
@@ -164,26 +83,26 @@ const Layout = ({ children, sidebar = true }) => {
             </div>
           </div>
           <div
-            className="hidden w-full md:block md:w-auto"
+            className="hidden w-full md:block md:w-auto mt-2"
             id="navbar-solid-bg"
           >
             <ul
               id={"nav-links"}
-              className="mt-4 flex flex-col items-center rounded-lg bg-gray-50 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-transparent rtl:space-x-reverse dark:border-gray-700 dark:bg-gray-800 md:dark:bg-transparent"
+              className="flex flex-col items-center font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
             >
               <li>
-                <a
-                  href="#"
-                  className="block rounded bg-blue-700 px-3 py-2 text-white md:bg-transparent md:p-0 md:font-bold md:text-indigo-900 dark:bg-blue-600 md:dark:bg-transparent md:dark:text-blue-500"
+                <Link
+                  href="/"
+                  className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-indigo-900 md:font-bold md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
                   aria-current="page"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
                 <a
                   href="#"
-                  className="block rounded px-3 py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
+                  className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Services
                 </a>
@@ -191,42 +110,64 @@ const Layout = ({ children, sidebar = true }) => {
               <li>
                 <a
                   href="#"
-                  className="block rounded px-3 py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
+                  className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
-                  Pricing
+                  About
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  className="block rounded px-3 py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
+                  className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Contact
                 </a>
               </li>
               <li>
-                <button
-                  type="submit"
-                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Login
-                </button>
+                {userName ? (
+                  <span
+                    onClick={toggleDropdown}
+                    className="rounded-md bg-indigo-600 hover:bg-indigo-800 cursor-pointer px-3 py-2 text-sm font-semibold text-white shadow-sm"
+                  >
+                    {userName}
+                  </span>
+                ) : (
+                  <Link
+                    href="/Login"
+                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Login
+                  </Link>
+                )}
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-20">
+                    <button
+                      type={"button"}
+                      className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Profile
+                    </button>
+                    <button
+                      type={"button"}
+                      className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={logout}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
               </li>
             </ul>
           </div>
         </div>
       </nav>
 
-{isMenuOpen && (      <aside
+      <aside
         id="logo-sidebar"
-        className="fixed left-0 top-16 z-40 h-screen w-64 -translate-x-full bg-indigo-950 bg-opacity-95 p-4 transition-transform sm:translate-x-0 dark:bg-gray-900"
+        className={`${isMenuOpen ? "block" : "hidden"} fixed top-16 left-0 z-20 w-64 p-4 h-screen transition-transform -translate-x-full bg-indigo-950 dark:bg-gray-900  bg-opacity-95 sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div
-          className={
-            "mb-4 overflow-y-auto rounded bg-indigo-950 bg-opacity-90 p-4 shadow-lg dark:bg-gray-950"
-          }
-        >
+        <div className="p-4 mb-4 overflow-y-auto bg-indigo-950 bg-opacity-90 dark:bg-gray-950 rounded shadow-lg">
           <ul className="space-y-1">
             <li>
               <a
@@ -371,9 +312,9 @@ const Layout = ({ children, sidebar = true }) => {
           </ul>
         </div>
       </aside>
-          <main className={`pt-16 ${isMenuOpen && ('pl-64')} ${styles.body}`}>
-            {children}
-          </main>
+      <main className={`pt-16 ${isMenuOpen && "pl-64"} ${styles.body}`}>
+        {children}
+      </main>
 
       <footer className="fixed bottom-0 z-50 w-full bg-indigo-950 p-4 shadow md:flex md:items-center md:justify-center md:p-6 dark:border-gray-600 dark:bg-gray-800">
         <span className="text-sm text-indigo-50 text-opacity-80 sm:text-center dark:text-gray-400">
