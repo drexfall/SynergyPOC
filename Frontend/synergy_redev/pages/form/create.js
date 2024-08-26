@@ -16,12 +16,17 @@ export default function Editor() {
   const [template, setTemplate] = useState(null);
   const templateInput = useRef();
   useEffect(() => {
+    console.log(template);
     if (template) {
-      const data = JSON.parse(template["Json"]);
-      if (Array.isArray(data.components)) {
-        setComponents(data.components);
+      if (template.Json) {
+        const data = JSON.parse(template["Json"]);
+        if (Array.isArray(data.components)) {
+          setComponents(data.components);
+        } else {
+          console.error("Expected an array of components");
+        }
       } else {
-        console.error("Expected an array of components");
+        console.error("Expected component Json");
       }
     }
   }, [template]);
@@ -53,10 +58,10 @@ export default function Editor() {
     console.log(data);
   }
 
-  async function getTemplate(templateCode) {
+  async function getTemplate(templateId) {
     try {
       setLoading(true);
-      const response = await fetch("/forms/GetTemplates?code=" + templateCode);
+      const response = await fetch("/forms/GetFormTemplates?id=" + templateId);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -189,34 +194,28 @@ export default function Editor() {
       <main>
         <h2 className={"text-2xl font-semibold p-4 mt-2"}>Template Editor</h2>
         <div className="p-4 flex flex-col gap-4">
-          <div className={"flex gap-4"}>
-            <InputField
-              inputRef={templateInput}
-              id={"template-code"}
-              label={"Template Code"}
-              required={true}
-              button={{
-                icon: faRefresh,
-                direction: "right",
-                submit: getTemplate,
+          <div className={"flex flex-col gap-4"}>
+            {/*<InputField*/}
+            {/*  inputRef={templateInput}*/}
+            {/*  id={"template-code"}*/}
+            {/*  label={"Template Code"}*/}
+            {/*  required={true}*/}
+            {/*  button={{*/}
+            {/*    icon: faRefresh,*/}
+            {/*    direction: "right",*/}
+            {/*    submit: getTemplate,*/}
+            {/*  }}*/}
+            {/*></InputField>*/}
+            <Select
+              options={{
+                source: "/forms/GetTemplates",
+                display: "DisplayName",
+                value: "Id",
               }}
-            ></InputField>
-            {/*<Select*/}
-            {/*  options={[*/}
-            {/*    {*/}
-            {/*      label: "Hello",*/}
-            {/*      value: "Hey",*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      label: "Hello",*/}
-            {/*      value: "Hey",*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      label: "Hello",*/}
-            {/*      value: "Hey",*/}
-            {/*    },*/}
-            {/*  ]}*/}
-            {/*></Select>*/}
+              onSelect={(element) => {
+                getTemplate(element.value);
+              }}
+            ></Select>
           </div>
           <hr />
           {loading ? (

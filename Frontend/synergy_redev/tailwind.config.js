@@ -11,13 +11,18 @@ module.exports = {
       }),
 
       animation: {
-        fade: "fadeIn .5s ease-in-out",
+        fade: "fadeIn .3s ease-in-out",
+        slide: "slideIn .3s ease-in-out",
       },
 
       keyframes: {
         fadeIn: {
           from: { opacity: 0 },
           to: { opacity: 1 },
+        },
+        slideIn: {
+          from: { opacity: 0, translate: "0 -5pt" },
+          to: { opacity: 1, translate: "0 0" },
         },
       },
     },

@@ -1,50 +1,106 @@
 import { InputField } from "./form";
 import Button from "../custom/Button";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Loader from "../custom/Loader";
 
-export function Select({ name, id, options = [], value, onChange, label }) {
+export function Select({
+  name,
+  id,
+  search = true,
+  options,
+  onChange,
+  onSelect,
+}) {
+  const [data, setData] = useState(null);
+  const [selected, setSelected] = useState("Select");
+  const [loading, isLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef();
+  useEffect(() => {
+    window.addEventListener("click", (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    });
+    window.addEventListener("blur", (event) => {
+      setIsOpen(false);
+    });
+  }, []);
+  useEffect(() => {
+    if (Array.isArray(options.data)) {
+      isLoading(false);
+    } else if (typeof options.source === "string") {
+      fetch(options.source)
+        .then((res) => res.json())
+        .then((res) => {
+          setData(
+            res.sort((a, b) => {
+              return a[options["display"]] > b[options["display"]];
+            }),
+          );
+          isLoading(false);
+        });
+    }
+  }, [options]);
+  useEffect(() => {
+    onSelect(selected);
+  }, [selected]);
+  const filterData = async (value) => {
+    isLoading(true);
+    let filteredData = data.filter((d) => {
+      return Object.values(d).includes(value);
+    });
+    setData(filteredData);
+    isLoading(false);
+  };
   return (
-    // <div className={"flex flex-col"}>
-    //   <label htmlFor={id}>{label}</label>
-    //   <select name={name} id={id} value={value} onChange={onChange}>
-    //     {options.map((option, index) => {
-    //       return (
-    //         <option key={index} value={option.value}>
-    //           {option.label}
-    //         </option>
-    //       );
-    //     })}
-    //   </select>
-    // </div>
-    <div className={"relative"}>
-      {/*<InputField type={"select"} />*/}
+    <div
+      className={`relative group ${isOpen ? "active" : null}`}
+      ref={selectRef}
+    >
       <Button
         type={"dropdown"}
-        text={"Select a template"}
+        text={selected.display}
         className={"w-full"}
         onClick={() => setIsOpen(!isOpen)}
       />
       <div
-        className={`${isOpen ? "flex" : "hidden"} top-4 relative flex-col text-primary-100 bg-secondary-800 shadow-md w-96 rounded-xl bg-clip-border`}
+        className={`${isOpen ? "flex" : "hidden"}  border-2 border-primary-950 top-full my-2 animate-slide z-50 absolute flex-col text-primary-100 bg-secondary-950 group-hover:shadow-primary-800 shadow-md shadow-primary-950 w-full rounded-md p-4 bg-clip-border transition-all`}
       >
+        {search ? (
+          <InputField placeholder={"Search"} onChange={filterData}></InputField>
+        ) : null}
         <ul
           className={
-            "flex min-w-[240px] flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700"
+            "flex min-w-[240px] max-h-64 overflow-y-auto flex-col my-2 font-sans text-base font-normal text-blue-gray-700"
           }
         >
-          {options.map((option) => {
-            return (
-              <li
-                role={"button"}
-                className={
-                  "flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
-                }
-              >
-                {option.label}
-              </li>
-            );
-          })}
+          {loading ? (
+            <Loader></Loader>
+          ) : data ? (
+            data.map((option) => {
+              return (
+                <li
+                  id={option[options.value]}
+                  role={"button"}
+                  className={
+                    "flex items-center w-full p-2 leading-tight transition-all rounded outline-none text-start hover:bg-primary-500 hover:bg-opacity-40 hover:text-primary-100 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+                  }
+                  onClick={(event) => {
+                    setSelected({
+                      display: event.target.textContent,
+                      value: event.target.id,
+                    });
+                    setIsOpen(false);
+                  }}
+                >
+                  {option[options.display]}
+                </li>
+              );
+            })
+          ) : (
+            <p>No data to select</p>
+          )}
         </ul>
       </div>
     </div>

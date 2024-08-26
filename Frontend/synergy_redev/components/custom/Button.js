@@ -5,7 +5,7 @@ import { faArrowDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 export default function Button(props) {
   return (
     <button
-      className={`${props.className} flex rounded-md px-3.5 py-2.5 text-sm font-semibold  transition-all ${props.type === "dropdown" ? "bg-primary-600 bg-opacity-65 text-primary-100 gap-2 justify-center" : "bg-transparent text-indigo-600 hover:bg-indigo-100"}`}
+      className={`${props.className} flex rounded-md px-3.5 py-2.5 text-sm font-semibold  transition-all ${props.type === "dropdown" ? "bg-primary-600 bg-opacity-50 group-hover:bg-opacity-65 text-primary-100 gap-2 justify-between" : "bg-transparent text-indigo-600 hover:bg-indigo-100"}`}
       id={props.id}
       onClick={props.onClick}
     >
