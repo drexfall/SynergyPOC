@@ -9,38 +9,49 @@ import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../components/custom/Loader";
 import Button from "../../components/custom/Button";
 import { Select } from "../../components/FormIO/Select";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 export default function Editor() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [components, setComponents] = useState([]);
+  const [components, setComponents] = useState(null);
   const [template, setTemplate] = useState(null);
-  const templateInput = useRef();
+
   useEffect(() => {
-    console.log(template);
-    if (template) {
-      if (template.Json) {
-        const data = JSON.parse(template["Json"]);
-        if (Array.isArray(data.components)) {
-          setComponents(data.components);
-        } else {
-          console.error("Expected an array of components");
-        }
+    let templateId = router.query.templateId;
+    axios.get(`/forms/GetFormTemplates?id=${templateId}`).then((response) => {
+      setTemplate(response.data);
+    });
+  }, []);
+  useEffect(() => {
+    if (!template) {
+      return;
+    }
+    if (template.Json) {
+      const data = JSON.parse(template["Json"]);
+      if (Array.isArray(data.components)) {
+        setComponents(data.components);
       } else {
-        console.error("Expected component Json");
+        setComponents(null);
+        console.error("Expected an array of components");
       }
+    } else {
+      setComponents(null);
+      console.error("Expected component Json");
     }
   }, [template]);
 
   async function onSubmit(event) {
     event.preventDefault();
-    console.log(event);
+
     let formData = new FormData(event.currentTarget);
     let jsonData = {};
 
     Array.from(formData.entries()).map(([key, value]) => {
       jsonData[key] = value;
     });
-    console.log(formData, jsonData);
+
     const response = await fetch("/forms/ManageForm", {
       method: "POST",
       headers: {
@@ -56,22 +67,6 @@ export default function Editor() {
     });
     const data = await response.json();
     console.log(data);
-  }
-
-  async function getTemplate(templateId) {
-    try {
-      setLoading(true);
-      const response = await fetch("/forms/GetFormTemplates?id=" + templateId);
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const result = await response.json();
-      setTemplate(result);
-    } catch (error) {
-      console.error("Failed to fetch JSON:", error);
-    }
-    setLoading(false);
   }
 
   function renderComponent(component) {
@@ -179,6 +174,17 @@ export default function Editor() {
             </button>
           </div>
         );
+      case "panel":
+        return (
+          <div
+            key={component.key}
+            className={
+              "p-4 w-full border-2 border-primary-950 min-h-20 rounded"
+            }
+          >
+            <p>{component.title} Panel</p>
+          </div>
+        );
       default:
         return null;
     }
@@ -192,32 +198,11 @@ export default function Editor() {
       </Head>
 
       <main>
-        <h2 className={"text-2xl font-semibold p-4 mt-2"}>Template Editor</h2>
+        <h2 className={"text-2xl font-semibold p-4 mt-2"}>
+          {"Create "}
+          {template ? template.DisplayName : null}
+        </h2>
         <div className="p-4 flex flex-col gap-4">
-          <div className={"flex flex-col gap-4"}>
-            {/*<InputField*/}
-            {/*  inputRef={templateInput}*/}
-            {/*  id={"template-code"}*/}
-            {/*  label={"Template Code"}*/}
-            {/*  required={true}*/}
-            {/*  button={{*/}
-            {/*    icon: faRefresh,*/}
-            {/*    direction: "right",*/}
-            {/*    submit: getTemplate,*/}
-            {/*  }}*/}
-            {/*></InputField>*/}
-            <Select
-              options={{
-                source: "/forms/GetTemplates",
-                display: "DisplayName",
-                value: "Id",
-              }}
-              onSelect={(element) => {
-                getTemplate(element.value);
-              }}
-            ></Select>
-          </div>
-          <hr />
           {loading ? (
             <div>
               <Loader />
@@ -225,8 +210,12 @@ export default function Editor() {
           ) : template ? (
             <>
               <form onSubmit={onSubmit} className={"flex flex-col gap-4"}>
-                {components.map((component) => renderComponent(component))}
-                <hr />
+                {components ? (
+                  components.map((component) => renderComponent(component))
+                ) : (
+                  <p>This template does not have any components.</p>
+                )}
+                <hr className={"dark:border-secondary-800"} />
                 <div className={"inline-flex gap-4 ms-auto"}>
                   <Button
                     type={"reset"}
@@ -238,7 +227,7 @@ export default function Editor() {
               </form>
             </>
           ) : (
-            <p>Please enter a template code</p>
+            <p>Template code missing</p>
           )}
         </div>
       </main>

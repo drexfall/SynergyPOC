@@ -84,3 +84,23 @@ export function InputField({
     </div>
   );
 }
+
+export function CheckBox(props) {
+  return (
+    <label htmlFor={props.id} class="flex cursor-pointer items-start gap-4">
+      <div class="flex items-center">
+        &#8203;
+        <input
+          type="checkbox"
+          class="size-4 rounded border-gray-300"
+          id={props.id}
+        />
+      </div>
+      {props.label ? (
+        <div>
+          <strong class="font-medium text-gray-900"> John Clapton </strong>
+        </div>
+      ) : null}
+    </label>
+  );
+}

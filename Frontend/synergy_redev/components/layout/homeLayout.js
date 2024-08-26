@@ -183,6 +183,45 @@ const Layout = ({ children, sidebar = true }) => {
               <details className="group [&_summary::-webkit-details-marker]:hidden">
                 <summary className="group flex cursor-pointer items-center justify-between rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
                   <div className="flex items-center gap-4">
+                    <FontAwesomeIcon icon={faWindowRestore} className={"w-4"} />
+                    <span className="text-sm font-medium"> Template </span>
+                  </div>
+
+                  <span className="w-3 shrink-0 transition duration-300 group-open:-rotate-180">
+                    <FontAwesomeIcon icon={faChevronDown} />
+                  </span>
+                </summary>
+
+                <ul className="mt-2 space-y-1 px-4">
+                  <li>
+                    <Link
+                      href="/form/dashboard"
+                      className={
+                        "flex items-center gap-2 rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
+                      }
+                    >
+                      <FontAwesomeIcon icon={faTable} className={"w-4"} />
+                      <span className="text-sm font-medium"> Form </span>
+                    </Link>
+                  </li>
+                </ul>
+              </details>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center gap-4 rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
+              >
+                <FontAwesomeIcon icon={faWindowMaximize} className={"w-4"} />
+                <span className="text-sm font-medium"> Portal </span>
+              </a>
+            </li>
+
+            <li>
+              <details className="group [&_summary::-webkit-details-marker]:hidden">
+                <summary className="group flex cursor-pointer items-center justify-between rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
+                  <div className="flex items-center gap-4">
                     <FontAwesomeIcon icon={faUser} className={"w-4"} />
                     <span className="text-sm font-medium"> User </span>
                   </div>
@@ -209,56 +248,6 @@ const Layout = ({ children, sidebar = true }) => {
                     >
                       Calendar
                     </a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-
-            <li>
-              <a
-                href="#"
-                className="flex items-center gap-4 rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
-              >
-                <FontAwesomeIcon icon={faWindowMaximize} className={"w-4"} />
-                <span className="text-sm font-medium"> Portal </span>
-              </a>
-            </li>
-
-            <li>
-              <details className="group [&_summary::-webkit-details-marker]:hidden">
-                <summary className="group flex cursor-pointer items-center justify-between rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
-                  <div className="flex items-center gap-4">
-                    <FontAwesomeIcon icon={faWindowRestore} className={"w-4"} />
-                    <span className="text-sm font-medium"> Template </span>
-                  </div>
-
-                  <span className="w-3 shrink-0 transition duration-300 group-open:-rotate-180">
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  </span>
-                </summary>
-
-                <ul className="mt-2 space-y-1 px-4">
-                  <li>
-                    <Link
-                      href="/form/create"
-                      className={
-                        "flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
-                      }
-                    >
-                      <FontAwesomeIcon icon={faAdd} className={"w-4"} />
-                      <span className="text-sm font-medium"> Create </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/form/dashboard"
-                      className={
-                        "flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
-                      }
-                    >
-                      <FontAwesomeIcon icon={faTable} className={"w-4"} />
-                      <span className="text-sm font-medium"> Dashboard </span>
-                    </Link>
                   </li>
                 </ul>
               </details>

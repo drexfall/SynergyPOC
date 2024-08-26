@@ -28,6 +28,7 @@ export function Select({
   }, []);
   useEffect(() => {
     if (Array.isArray(options.data)) {
+      setData(options.data);
       isLoading(false);
     } else if (typeof options.source === "string") {
       fetch(options.source)
@@ -38,6 +39,10 @@ export function Select({
               return a[options["display"]] > b[options["display"]];
             }),
           );
+          isLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
           isLoading(false);
         });
     }
@@ -76,7 +81,9 @@ export function Select({
           }
         >
           {loading ? (
-            <Loader></Loader>
+            <div className={"w-full flex items-center justify-center p-2 mt-4"}>
+              <Loader></Loader>
+            </div>
           ) : data ? (
             data.map((option) => {
               return (
