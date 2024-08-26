@@ -8,11 +8,11 @@ export function InputField({
   placeholder = "",
   required = false,
   button,
+  ...props
 }) {
   const [error, setError] = useState(null);
   const inputRef = useRef();
-  const inputClass =
-    "w-full invalid:text-red-500 group-hover:text-primary-800 dark:group-hover:text-primary-200 text-primary-600 dark:text-secondary-300 focus:text-primary-800 dark:focus:text-primary-200 peer rounded border-none bg-inherit p-3 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 transition-all duration-300";
+  const inputClass = ` w-full invalid:text-red-500 group-hover:text-primary-800 dark:group-hover:text-primary-200 text-primary-600 dark:text-secondary-300 focus:text-primary-800 dark:focus:text-primary-200 peer rounded border-none bg-inherit p-3 ${placeholder === "" ? "placeholder-transparent" : "placeholder-primary-300 placeholder-opacity-60 placeholder-text-sm"} focus:border-transparent focus:outline-none focus:ring-0 transition-all duration-300`;
   const validateInput = () => {
     if (inputRef.current.validity.valid) {
       return setError(null);
@@ -44,7 +44,10 @@ export function InputField({
               required={required}
               placeholder={placeholder}
               ref={inputRef}
-              onChange={validateInput}
+              onChange={() => {
+                props.onChange ? props.onChange(inputRef.current.value) : null;
+                validateInput();
+              }}
             ></textarea>
           ) : (
             <input
@@ -55,7 +58,10 @@ export function InputField({
               required={required}
               ref={inputRef}
               placeholder={placeholder}
-              onChange={validateInput}
+              onChange={() => {
+                props.onChange ? props.onChange(inputRef.current.value) : null;
+                validateInput();
+              }}
             />
           )}
 
