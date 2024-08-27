@@ -67,12 +67,18 @@ export default function Table({
       setLoading(false);
     }
     if (typeof data.source === "string") {
-      axios.get(data.source).then((res) => {
-        if (Array.isArray(res.data)) {
-          setFetchedData(res.data);
-          setLoading(false);
-        }
-      });
+      axios
+        .get(data.source)
+        .then((res) => {
+          if (Array.isArray(res.data)) {
+            setFetchedData(res.data);
+            setLoading(false);
+          }
+        })
+        .catch((e) => {
+          setFetchedData(null);
+          console.log(e);
+        });
     }
   }, []);
 
@@ -156,22 +162,20 @@ export default function Table({
     >
       <ContextMenu innerRef={contextMenu} options={actions}></ContextMenu>
       <div className="overflow-x-auto shadow-md ">
-
-          <div
-            className={
-              "p-4 bg-primary-300 shadow-md border-l-4 text-primary-100 dark:bg-primary-950 dark:text-primary-300"
-            }
-          >
-
-            {selection ? (
-              <Button
-                icon={faClose}
-                onClick={() => {
-                  setSelection(false);
-                }}
-              ></Button>
-            ) : null}
-          </div>
+        <div
+          className={
+            "p-4 bg-primary-300 shadow-md border-l-4 text-primary-100 dark:bg-primary-950 dark:text-primary-300"
+          }
+        >
+          {selection ? (
+            <Button
+              icon={faClose}
+              onClick={() => {
+                setSelection(false);
+              }}
+            ></Button>
+          ) : null}
+        </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-primary-900 uppercase bg-primary-200 dark:bg-primary-950 dark:bg-opacity-50 dark:text-primary-50">
             <tr>
@@ -297,7 +301,7 @@ export default function Table({
                   id={`page-${index + 1}`}
                   className={`${[currentPage - 1, currentPage, currentPage + 1].includes(index + 1) ? "flex" : "hidden"} items-center justify-center px-3 h-8 text-gray-500 leading-tight border 
                   border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
-                  ${currentPage === index + 1 && 'bg-indigo-400 text-white hover:bg-indigo-400 dark:bg-blue-100 dark:text-blue-700 dark:hover:bg-blue-100' }`}
+                  ${currentPage === index + 1 && "bg-indigo-400 text-white hover:bg-indigo-400 dark:bg-blue-100 dark:text-blue-700 dark:hover:bg-blue-100"}`}
                   onClick={() => {
                     setCurrentPage(index + 1);
                   }}

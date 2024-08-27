@@ -2,10 +2,13 @@ import { InputField } from "./form";
 import Button from "../custom/Button";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../custom/Loader";
+import axios from "axios";
 
 export function Select({
   name,
   id,
+  load,
+  parameter,
   search = true,
   options,
   onChange,
@@ -27,6 +30,24 @@ export function Select({
     });
   }, []);
   useEffect(() => {
+    switch (load) {
+      case "LOV":
+        axios
+          .get(`/forms/GetLOVIdNameList?lovType=${parameter}`)
+          .then((res) => {
+            console.log(res);
+            options.data = res.data;
+          });
+        break;
+      case "Enum":
+        axios
+          .get(`/forms/GetEnumIdNameList?enumType=${parameter}`)
+          .then((res) => {
+            console.log(res);
+            options.data = res.data;
+          });
+        break;
+    }
     if (Array.isArray(options.data)) {
       setData(options.data);
       isLoading(false);
@@ -48,7 +69,7 @@ export function Select({
     }
   }, [options]);
   useEffect(() => {
-    onSelect(selected);
+    onSelect && onSelect(selected);
   }, [selected]);
   const filterData = async (value) => {
     isLoading(true);

@@ -76,11 +76,12 @@ export default function Editor() {
   }
 
   function renderComponent(component) {
-    console.log(component);
     switch (component.type) {
       case "textfield":
       case "number":
       case "password":
+      case "email":
+      case "address":
       case "textarea":
         return (
           <div key={component.key} className="mb-4">
@@ -193,7 +194,16 @@ export default function Editor() {
 
       case "columns":
         return (
-          <Columns components={components} renderComponent={renderComponent} />
+          <div className={"flex gap-4"}>
+            {component.columns.map((column, i) => {
+              return (
+                <Columns
+                  components={column.components}
+                  renderComponent={renderComponent}
+                ></Columns>
+              );
+            })}
+          </div>
         );
 
       case "panel":
@@ -207,6 +217,23 @@ export default function Editor() {
             <p>{component.title} Panel</p>
           </div>
         );
+      case "select":
+        console.log(component);
+        return (
+          <Select
+            load={component.loadTable}
+            parameter={component.parameterCode}
+            options={{
+              display: component.mapValue,
+              value: component.mapId,
+            }}
+          ></Select>
+        );
+
+      case "tags":
+        return <></>;
+      case "file":
+        return <></>;
       default:
         return null;
     }
