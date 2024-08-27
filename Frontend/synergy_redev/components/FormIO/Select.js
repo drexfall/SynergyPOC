@@ -60,7 +60,7 @@ export function Select({
   };
   return (
     <div
-      className={`relative group ${isOpen ? "active" : null}`}
+      className={`relative group w-full ${isOpen ? "active" : null}`}
       ref={selectRef}
     >
       <Button

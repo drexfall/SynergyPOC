@@ -7,3 +7,6 @@ export function generateRandomId(length = 5) {
   }
   return result;
 }
+export function toTitle(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

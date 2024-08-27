@@ -18,7 +18,7 @@ import { Select } from "../FormIO/Select";
 
 export default function Table({
   data,
-  columns = [],
+  columns,
   pageLimit = 10,
   actions = [
     {
@@ -33,6 +33,7 @@ export default function Table({
 }) {
   const [allData, setAllData] = useState([]);
   const [fetchedData, setFetchedData] = useState(data);
+  const [fetchedColumns, setFetchedColumns] = useState(columns);
   const [pageData, setPageData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,11 +56,28 @@ export default function Table({
     document.addEventListener("blur", (event) => {
       hideContextMenu();
     });
-    if (!data) {
+    if (!data || !columns) {
       setFetchedData(null);
+      setFetchedColumns(null);
       setAllData([]);
       setLoading(false);
       return;
+    }
+    if (typeof data === "function") {
+      data().then((res) => {
+        setFetchedData(res);
+        setLoading(false);
+      });
+    }
+    if (typeof columns === "function") {
+      columns().then((res) => {
+        setFetchedColumns(res);
+        setLoading(false);
+      });
+    }
+    if (Array.isArray(data)) {
+      data.length ? setFetchedData(data) : setFetchedData(null);
+      setLoading(false);
     }
     if (typeof data.source === "string") {
       axios.get(data.source).then((res) => {
@@ -90,11 +108,13 @@ export default function Table({
   }, []);
 
   useEffect(() => {
-
-    let _data = [],
-      lowerLimit = (currentPage - 1) * pageLimit,
-      upperLimit = pageLimit + (currentPage - 1) * pageLimit;
     if (Array.isArray(fetchedData)) {
+      let _data = [],
+        lowerLimit = (currentPage - 1) * pageLimit,
+        upperLimit = Math.min(
+          fetchedData.length,
+          pageLimit + (currentPage - 1) * pageLimit,
+        );
       for (let i = lowerLimit; i < upperLimit; i++) {
         if(fetchedData[i]){
 
@@ -204,7 +224,8 @@ export default function Table({
     menu.style.left = posX + "px";
     menu.style.top = posY + "px";
     menu.contextData = {
-      active: event.currentTarget.id,
+      id: event.currentTarget.id,
+      name: event.currentTarget.dataset.name,
     };
     showContextMenu();
   };
@@ -218,12 +239,12 @@ export default function Table({
       <ContextMenu innerRef={contextMenu} options={actions}></ContextMenu>
       <div className="overflow-x-auto shadow-md ">
 
-        <div
-          className={
-            "p-4 bg-primary-300 shadow-md text-primary-100 dark:bg-primary-950 dark:text-primary-300"
-          }
-        >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+          <div
+            className={
+              "p-4 bg-primary-300 shadow-md border-l-4 text-primary-100 dark:bg-primary-950 dark:text-primary-300"
+            }
+          >
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
             {selection ? (
               <div><Button
                 icon={faClose}
@@ -258,14 +279,14 @@ export default function Table({
                   <CheckBox />
                 </td>
               ) : null}
-              {columns
-                ? columns.map((column, index) => {
-                  return (
-                    <th scope="col" className="px-6 py-5" key={index}>
-                      {column.header}
-                    </th>
-                  );
-                })
+              {fetchedColumns
+                ? fetchedColumns.map((column, index) => {
+                    return (
+                      <th scope="col" className="px-6 py-5" key={index}>
+                        {column.header}
+                      </th>
+                    );
+                  })
                 : null}
             </tr>
           </thead>
@@ -281,27 +302,30 @@ export default function Table({
                   </div>
                 </td>
               </tr>
-            ) : pageData.length ? (
+            ) : pageData ? (
               pageData.map((row, index) => {
                 return (
                   <tr
-                    className={`${index === pageData.length - 1 ? null : "border-b"} dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-linear cursor-pointer`}
+                    className={`${index === pageData.length - 1 ? null : "border-b"} h-10 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-linear cursor-pointer`}
                     onClick={selectRow}
                     onContextMenu={handleContextMenu}
                     id={row[props.rowId]}
+                    data-name={row[props.rowName]}
                   >
                     {selection ? (
-                      <td className={"p-4"}>
+                      <td className={"p-4 "}>
                         <CheckBox />
                       </td>
                     ) : null}
-                    {columns.map((column, index) => {
-                      return (
-                        <td className="px-6 py-4" key={index}>
-                          {row[column.field]}
-                        </td>
-                      );
-                    })}
+                    {fetchedColumns
+                      ? fetchedColumns.map((column, index) => {
+                          return (
+                            <td className=" px-6 py-4" key={index}>
+                              {row[column.field]}
+                            </td>
+                          );
+                        })
+                      : null}
                   </tr>
                 );
               })
@@ -337,7 +361,7 @@ export default function Table({
           <ul className="flex items-center -space-x-px h-8 text-xs">
             <li
               role={"button"}
-              className="flex items-center justify-center px-3 h-8 leading-tight bg-white rounded-s-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white rounded-s-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               onClick={() => {
                 setCurrentPage(1);
               }}
@@ -369,7 +393,10 @@ export default function Table({
                 <li
                   role={"button"}
                   aria-current="page"
-                  className={`${[currentPage - 1, currentPage, currentPage + 1].includes(index + 1) ? "flex" : "hidden"}  items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-white`}
+                  id={`page-${index + 1}`}
+                  className={`${[currentPage - 1, currentPage, currentPage + 1].includes(index + 1) ? "flex" : "hidden"} items-center justify-center px-3 h-8 text-gray-500 leading-tight border 
+                  border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
+                  ${currentPage === index + 1 && 'bg-indigo-400 text-white hover:bg-indigo-400 dark:bg-blue-100 dark:text-blue-700 dark:hover:bg-blue-100' }`}
                   onClick={() => {
                     setCurrentPage(index + 1);
                   }}
@@ -414,5 +441,5 @@ export default function Table({
         </nav>
       ) : null}
     </div>
-  );
+    )
 }

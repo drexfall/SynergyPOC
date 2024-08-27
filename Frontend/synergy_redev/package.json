@@ -20,7 +20,6 @@
     "formik": "^2.4.6",
     "grapesjs": "^0.21.12",
     "grapesjs-preset-webpage": "^1.0.3",
-    "gridjs": "^6.2.0",
     "http-proxy-middleware": "^3.0.0",
     "next": "latest",
     "postcss": "^8.4.41",
