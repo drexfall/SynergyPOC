@@ -41,7 +41,7 @@ function Crumb({
   return (
     <span
       className={
-        "flex gap-2 text-xs  text-opacity-90 dark:text-opacity-50 hover:text-opacity-100 text-primary-900 dark:text-primary-300 items-center"
+        "flex gap-2 text-xs text-opacity-90 hover:text-opacity-100 text-primary-900 dark:text-primary-300 items-center"
       }
     >
       <Link
