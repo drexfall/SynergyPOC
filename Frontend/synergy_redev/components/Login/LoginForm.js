@@ -71,7 +71,7 @@ const LoginForm = () => {
               />
             </div>
             <div className="mt-6 flex flex-col items-center">
-              <h1 className="text-2xl xl:text-3xl font-extrabold">Login</h1>
+              <h1 className="text-2xl xl:text-3xl font-extrabold text-gray-800">Login</h1>
               <div className="w-full flex-1 mt-8">
                 <div className="mx-auto max-w-xs">
                   <form onSubmit={formik.handleSubmit}>

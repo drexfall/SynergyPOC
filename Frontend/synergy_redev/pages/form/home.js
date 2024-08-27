@@ -31,7 +31,7 @@ export default function Home() {
         {template ? (
           <>
             <div className={"flex w-full justify-between"}>
-              <h2 className={"text-2xl font-semibold text-primary-300"}>
+              <h2 className={"text-2xl font-semibold text-primary-900 dark:text-primary-300"}>
                 {template.DisplayName}
               </h2>
               <Button
@@ -51,7 +51,7 @@ export default function Home() {
             </div>
             {template.Description ? (
               <>
-                <p className={"text-primary-200"}>{template.Description}</p>
+                <p className={"text-primary-900 dark:text-primary-200"}>{template.Description}</p>
                 <hr />
               </>
             ) : null}

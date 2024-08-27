@@ -37,10 +37,10 @@ export default function Dashboard() {
       </Head>
 
       <main className={"p-4 mx-2 mt-2 flex flex-col gap-4"}>
-        <h2 className={"text-2xl font-semibold text-primary-300"}>
+        <h2 className={"text-2xl font-semibold text-primary-900 dark:text-primary-300"}>
           Form Template Dashboard
         </h2>
-        <p className={"text-primary-200"}>
+        <p className={"text-primary-900 dark:text-primary-200"}>
           This page contains a brief overview of all form templates created in
           the Synergy platform.
         </p>
