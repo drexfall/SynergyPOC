@@ -3,12 +3,11 @@ import { useState } from "react";
 import Head from "next/head";
 import Layout from "../../components/layout/homeLayout";
 import Table from "../../components/custom/Table";
-import tableData from "../../components/FormIO/table.json";
 import { Info } from "../../components/FormIO/Docs";
 import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 
-export default function Dashboard() {
+export default function Index() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [template, setTemplate] = useState();
@@ -47,11 +46,14 @@ export default function Dashboard() {
         <Info
           className={"mt-4"}
           heading={"Quick Tip"}
-          text={"Try clicking on any row to get performable actions."}
+          text={
+            "Try clicking on any row to select. Right click for performable actions"
+          }
         ></Info>
         <div className={"mt-4"}>
           <Table
             rowId={"Id"}
+            rowName={"DisplayName"}
             data={{
               source: "/forms/GetFormTemplates",
             }}
@@ -77,29 +79,29 @@ export default function Dashboard() {
               {
                 label: "View",
                 icon: faEye,
-                onClick: (event) => {
+                onClick: (active) => {
                   router.push(
                     {
-                      pathname: `/form/home`,
+                      pathname: `/form/${active.name}`,
                       query: {
-                        templateId: event.active,
+                        templateId: active.id,
                       },
                     },
-                    "/form/home",
+                    `/form/${active.name}`,
                   );
                 },
               },
               {
                 label: "Edit",
                 icon: faPencil,
-                onClick: (event) => {
-                  router.push(`/template/manage/${event.active}`);
+                onClick: (active) => {
+                  router.push(`/template/manage/${active.id}`);
                 },
               },
               {
                 label: "Delete",
                 icon: faTrash,
-                onClick: (event) => {
+                onClick: (active) => {
                   console.log("Delete");
                 },
               },

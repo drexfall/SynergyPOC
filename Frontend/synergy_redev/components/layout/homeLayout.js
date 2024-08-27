@@ -15,6 +15,7 @@ import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Breadcrumb from "../custom/Breadcrumb";
 
 const Layout = ({ children, sidebar = true }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -196,7 +197,7 @@ const Layout = ({ children, sidebar = true }) => {
                 <ul className="mt-2 space-y-1 px-4">
                   <li>
                     <Link
-                      href="/form/dashboard"
+                      href="/form"
                       className={
                         "flex items-center gap-2 rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
                       }
@@ -303,6 +304,13 @@ const Layout = ({ children, sidebar = true }) => {
         </div>
       </aside>
       <main className={`pt-16 ${isMenuOpen && "pl-64"} ${styles.body}`}>
+        <div
+          className={
+            "w-full bg-secondary-300 dark:bg-secondary-900 dark:bg-opacity-70"
+          }
+        >
+          <Breadcrumb></Breadcrumb>
+        </div>
         {children}
       </main>
 

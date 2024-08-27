@@ -1,27 +1,27 @@
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
-import Input from "../../components/FormIO/input";
-import DateTimeInput from "../../components/FormIO/datetime";
-import RadioGroup from "../../components/FormIO/radio";
-import Layout from "../../components/layout/homeLayout";
-import { InputField } from "../../components/FormIO/form";
+import Input from "../../../components/FormIO/input";
+import DateTimeInput from "../../../components/FormIO/datetime";
+import RadioGroup from "../../../components/FormIO/radio";
+import Layout from "../../../components/layout/homeLayout";
+import { InputField } from "../../../components/FormIO/form";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
-import Loader from "../../components/custom/Loader";
-import Button from "../../components/custom/Button";
-import { Select } from "../../components/FormIO/Select";
+import Loader from "../../../components/custom/Loader";
+import Button from "../../../components/custom/Button";
+import { Select } from "../../../components/FormIO/Select";
 import { useRouter } from "next/router";
 import axios from "axios";
-import DataGridComponent from "../../components/FormIO/datagrid";
+import DataGridComponent from "../../../components/FormIO/datagrid";
 
 export default function Editor() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [components, setComponents] = useState(null);
   const [template, setTemplate] = useState(null);
+  const { templateId, templateName } = router.query;
 
   useEffect(() => {
     setLoading(true);
-    let templateId = router.query.templateId;
     axios.get(`/forms/GetFormTemplates?id=${templateId}`).then((response) => {
       setTemplate(response.data);
       setLoading(false);
@@ -50,7 +50,9 @@ export default function Editor() {
 
     let formData = new FormData(event.currentTarget);
     let jsonData = {};
-
+    formData.forEach((e) => {
+      console.log(e);
+    });
     Array.from(formData.entries()).map(([key, value]) => {
       jsonData[key] = value;
     });
@@ -73,6 +75,7 @@ export default function Editor() {
   }
 
   function renderComponent(component) {
+    console.log(component);
     switch (component.type) {
       case "textfield":
       case "number":
@@ -229,12 +232,8 @@ export default function Editor() {
                 )}
                 <hr className={"dark:border-secondary-800"} />
                 <div className={"inline-flex gap-4 ms-auto"}>
-                  <Button
-                    type={"reset"}
-                    className={"secondary"}
-                    text={"Reset"}
-                  />
-                  <Button type={"submit"} className={"primary"} text={"Save"} />
+                  <Button type={"reset"} mode={"secondary"} text={"Reset"} />
+                  <Button type={"submit"} text={"Save"} />
                 </div>
               </form>
             </>

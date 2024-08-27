@@ -17,7 +17,7 @@ import Button from "./Button";
 
 export default function Table({
   data,
-  columns = [],
+  columns,
   pageLimit = 10,
   actions = [
     {
@@ -31,6 +31,7 @@ export default function Table({
   ...props
 }) {
   const [fetchedData, setFetchedData] = useState(data);
+  const [fetchedColumns, setFetchedColumns] = useState(columns);
   const [pageData, setPageData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,10 +44,27 @@ export default function Table({
     document.addEventListener("blur", (event) => {
       hideContextMenu();
     });
-    if (!data) {
+    if (!data || !columns) {
       setFetchedData(null);
+      setFetchedColumns(null);
       setLoading(false);
       return;
+    }
+    if (typeof data === "function") {
+      data().then((res) => {
+        setFetchedData(res);
+        setLoading(false);
+      });
+    }
+    if (typeof columns === "function") {
+      columns().then((res) => {
+        setFetchedColumns(res);
+        setLoading(false);
+      });
+    }
+    if (Array.isArray(data)) {
+      data.length ? setFetchedData(data) : setFetchedData(null);
+      setLoading(false);
     }
     if (typeof data.source === "string") {
       axios.get(data.source).then((res) => {
@@ -59,10 +77,13 @@ export default function Table({
   }, []);
 
   useEffect(() => {
-    let _data = [],
-      lowerLimit = (currentPage - 1) * pageLimit,
-      upperLimit = pageLimit + (currentPage - 1) * pageLimit;
     if (Array.isArray(fetchedData)) {
+      let _data = [],
+        lowerLimit = (currentPage - 1) * pageLimit,
+        upperLimit = Math.min(
+          fetchedData.length,
+          pageLimit + (currentPage - 1) * pageLimit,
+        );
       for (let i = lowerLimit; i < upperLimit; i++) {
         _data.push(fetchedData[i]);
         setPageData(_data);
@@ -121,7 +142,8 @@ export default function Table({
     menu.style.left = posX + "px";
     menu.style.top = posY + "px";
     menu.contextData = {
-      active: event.currentTarget.id,
+      id: event.currentTarget.id,
+      name: event.currentTarget.dataset.name,
     };
     showContextMenu();
   };
@@ -156,8 +178,8 @@ export default function Table({
                   <CheckBox />
                 </td>
               ) : null}
-              {columns
-                ? columns.map((column, index) => {
+              {fetchedColumns
+                ? fetchedColumns.map((column, index) => {
                     return (
                       <th scope="col" className="px-6 py-5" key={index}>
                         {column.header}
@@ -179,27 +201,30 @@ export default function Table({
                   </div>
                 </td>
               </tr>
-            ) : pageData.length ? (
+            ) : pageData ? (
               pageData.map((row, index) => {
                 return (
                   <tr
-                    className={`${index === pageData.length - 1 ? null : "border-b"} dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-linear cursor-pointer`}
+                    className={`${index === pageData.length - 1 ? null : "border-b"} h-10 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-linear cursor-pointer`}
                     onClick={selectRow}
                     onContextMenu={handleContextMenu}
                     id={row[props.rowId]}
+                    data-name={row[props.rowName]}
                   >
                     {selection ? (
-                      <td className={"p-4"}>
+                      <td className={"p-4 "}>
                         <CheckBox />
                       </td>
                     ) : null}
-                    {columns.map((column, index) => {
-                      return (
-                        <td className="px-6 py-4" key={index}>
-                          {row[column.field]}
-                        </td>
-                      );
-                    })}
+                    {fetchedColumns
+                      ? fetchedColumns.map((column, index) => {
+                          return (
+                            <td className=" px-6 py-4" key={index}>
+                              {row[column.field]}
+                            </td>
+                          );
+                        })
+                      : null}
                   </tr>
                 );
               })
