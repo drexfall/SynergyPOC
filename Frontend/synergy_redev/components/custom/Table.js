@@ -84,26 +84,27 @@ export default function Table({
         if (Array.isArray(res.data)) {
           setFetchedData(res.data);
           setAllData(res.data);
-          console.log(res.data, "  main data");
-
           setLoading(false);
         }
+      }).catch((e) => {
+        setFetchedData(null);
+        console.log(e);
       });
-      // console.log(columns, "cols")
-    }
-    if (columns.length > 0) {
-      const cols = columns.map((item) => {
-        const tempObj = {
-          display: item.header,
-          value: item.field
-        }
-        return tempObj
-      })
-      const tempData = { ...colFilter }
-      tempData.data = [...cols]
 
-      //console.log(tempData, "my cols")
-      selColFilter(tempData);
+      if (columns.length > 0) {
+        const cols = columns.map((item) => {
+          const tempObj = {
+            display: item.header,
+            value: item.field
+          }
+          return tempObj
+        })
+        const tempData = { ...colFilter }
+        tempData.data = [...cols]
+  
+        //console.log(tempData, "my cols")
+        selColFilter(tempData);
+      }
     }
   }, []);
 
@@ -244,17 +245,15 @@ export default function Table({
               "p-4 bg-primary-300 shadow-md border-l-4 text-primary-100 dark:bg-primary-950 dark:text-primary-300"
             }
           >
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
             {selection ? (
-              <div><Button
+
+              <Button
                 icon={faClose}
                 onClick={() => {
                   setSelection(false);
                 }}
-
-              ></Button></div>
-            ) : null
-            }
+              ></Button>
+            ) : null}
             {columns.length > 0 ?
               < >
                 <InputField
@@ -396,7 +395,7 @@ export default function Table({
                   id={`page-${index + 1}`}
                   className={`${[currentPage - 1, currentPage, currentPage + 1].includes(index + 1) ? "flex" : "hidden"} items-center justify-center px-3 h-8 text-gray-500 leading-tight border 
                   border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
-                  ${currentPage === index + 1 && 'bg-indigo-400 text-white hover:bg-indigo-400 dark:bg-blue-100 dark:text-blue-700 dark:hover:bg-blue-100' }`}
+                  ${currentPage === index + 1 && "bg-indigo-400 text-white hover:bg-indigo-400 dark:bg-blue-100 dark:text-blue-700 dark:hover:bg-blue-100"}`}
                   onClick={() => {
                     setCurrentPage(index + 1);
                   }}
