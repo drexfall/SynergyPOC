@@ -20,9 +20,10 @@ import Breadcrumb from "../custom/Breadcrumb";
 const Layout = ({ children, sidebar = true }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [showMenu, setShowMenu] = useState(true);
   const [userName, setUserName] = useState(null);
   var router = useRouter();
-
+  const currentRoute = router.pathname;
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -43,12 +44,22 @@ const Layout = ({ children, sidebar = true }) => {
       console.log(user);
       if (user) {
         setUserName(user.Name);
+        setIsMenuOpen(true);
+        setShowMenu(true);
       } else {
         setUserName(null);
+        if (router.pathname !== '/' && router.pathname !== '/Login') {
+          router.push('/Login');
+        }
       }
     } catch (error) {
-      console.error("Error checking user:", error);
+      console.log("Error checking user:", error);
       setUserName(null);
+      setIsMenuOpen(false);
+      setShowMenu(false);
+      if (router.pathname !== '/' && router.pathname !== '/Login') {
+        router.push('/Login');
+      }
     }
   };
 
@@ -63,7 +74,7 @@ const Layout = ({ children, sidebar = true }) => {
       <nav className="fixed w-full h-16 z-30 shadow dark:shadow-2xl bg-white dark:bg-gray-800">
         <div className=" flex flex-wrap justify-between items-center py-3 px-4">
           <div className={"flex gap-4 "}>
-            <button
+            {showMenu && <button
               data-collapse-toggle="navbar-solid-bg"
               type="button"
               id={"menu"}
@@ -73,7 +84,7 @@ const Layout = ({ children, sidebar = true }) => {
               onClick={toggleMenu}
             >
               <FontAwesomeIcon className={"size-4"} icon={faBars} />
-            </button>
+            </button>}
             <div className={"flex justify-start gap-4 items-center"}>
               <p
                 className={
@@ -145,13 +156,13 @@ const Layout = ({ children, sidebar = true }) => {
                   <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-20">
                     <button
                       type={"button"}
-                      className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block w-full px-4 py-2 text-sm text-gray-700 text-left dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       Profile
                     </button>
                     <button
                       type={"button"}
-                      className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block w-full px-4 py-2 text-sm text-gray-700 text-left dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={logout}
                     >
                       Logout
@@ -172,37 +183,44 @@ const Layout = ({ children, sidebar = true }) => {
         <div className="p-4 mb-4 overflow-y-auto bg-indigo-950 bg-opacity-90 dark:bg-gray-950 rounded shadow-lg">
           <ul className="space-y-1">
             <li>
-              <a
-                href="#"
-                className="flex items-center gap-4 rounded bg-indigo-200 px-4 py-2 text-indigo-950"
+              <Link
+                href="/"
+                className={`flex items-center gap-4 rounded px-4 py-2 ${
+                      currentRoute === "/"
+                        ? "bg-indigo-200 text-indigo-950"
+                        : "text-white hover:bg-indigo-200 hover:text-indigo-950"
+                    }`}
               >
                 <FontAwesomeIcon icon={faHome} className={"w-4"} />
                 <span className="text-sm font-medium"> Dashboard </span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <details className="group [&_summary::-webkit-details-marker]:hidden">
-                <summary className="group flex cursor-pointer items-center justify-between rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
+              <details className="group [&_summary::-webkit-details-marker]:hidden" open>
+                <summary
+                    className="group flex cursor-pointer items-center justify-between rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
                   <div className="flex items-center gap-4">
-                    <FontAwesomeIcon icon={faWindowRestore} className={"w-4"} />
+                    <FontAwesomeIcon icon={faWindowRestore} className={"w-4"}/>
                     <span className="text-sm font-medium"> Template </span>
                   </div>
 
                   <span className="w-3 shrink-0 transition duration-300 group-open:-rotate-180">
-                    <FontAwesomeIcon icon={faChevronDown} />
+                    <FontAwesomeIcon icon={faChevronDown}/>
                   </span>
                 </summary>
 
                 <ul className="mt-2 space-y-1 px-4">
                   <li>
                     <Link
-                      href="/form"
-                      className={
-                        "flex items-center gap-2 rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
-                      }
+                        href="/form"
+                        className={`flex items-center gap-4 rounded px-4 py-2 ${
+                            currentRoute === "/form/dashboard"
+                                ? "bg-indigo-200 text-indigo-950"
+                                : "text-white hover:bg-indigo-200 hover:text-indigo-950"
+                        }`}
                     >
-                      <FontAwesomeIcon icon={faTable} className={"w-4"} />
+                      <FontAwesomeIcon icon={faTable} className={"w-4"}/>
                       <span className="text-sm font-medium"> Form </span>
                     </Link>
                   </li>
@@ -210,21 +228,23 @@ const Layout = ({ children, sidebar = true }) => {
               </details>
             </li>
 
+
             <li>
               <a
-                href="#"
-                className="flex items-center gap-4 rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
+                  href="#"
+                  className="flex items-center gap-4 rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950"
               >
-                <FontAwesomeIcon icon={faWindowMaximize} className={"w-4"} />
+                <FontAwesomeIcon icon={faWindowMaximize} className={"w-4"}/>
                 <span className="text-sm font-medium"> Portal </span>
               </a>
             </li>
 
             <li>
-              <details className="group [&_summary::-webkit-details-marker]:hidden">
-                <summary className="group flex cursor-pointer items-center justify-between rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
+              <details className="group [&_summary::-webkit-details-marker]:hidden" open>
+                <summary
+                    className="group flex cursor-pointer items-center justify-between rounded px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
                   <div className="flex items-center gap-4">
-                    <FontAwesomeIcon icon={faUser} className={"w-4"} />
+                    <FontAwesomeIcon icon={faUser} className={"w-4"}/>
                     <span className="text-sm font-medium"> User </span>
                   </div>
 
@@ -256,7 +276,7 @@ const Layout = ({ children, sidebar = true }) => {
             </li>
 
             <li>
-              <details className="group [&_summary::-webkit-details-marker]:hidden">
+              <details className="group [&_summary::-webkit-details-marker]:hidden" open>
                 <summary className="group flex items-center justify-between rounded-lg px-4 py-2 text-white transition-all hover:bg-indigo-200 hover:text-indigo-950">
                   <div className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faGears} className={"w-5"} />

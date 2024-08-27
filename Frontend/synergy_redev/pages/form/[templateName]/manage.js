@@ -12,6 +12,8 @@ import { Select } from "../../../components/FormIO/Select";
 import { useRouter } from "next/router";
 import axios from "axios";
 import DataGridComponent from "../../../components/FormIO/datagrid";
+import DataGridComponent from "../../components/FormIO/datagrid";
+import Columns from "../../components/FormIO/Columns";
 
 export default function Editor() {
   const router = useRouter();
@@ -189,6 +191,10 @@ export default function Editor() {
             </button>
           </div>
         );
+
+      case "columns":
+        return <Columns components={components} renderComponent={renderComponent} />;
+
       case "panel":
         return (
           <div
