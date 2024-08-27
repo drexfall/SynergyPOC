@@ -329,7 +329,7 @@ const Layout = ({ children, sidebar = true }) => {
             "w-full bg-secondary-300 dark:bg-secondary-900 dark:bg-opacity-70"
           }
         >
-          <Breadcrumb></Breadcrumb>
+          {showMenu && <Breadcrumb></Breadcrumb>}
         </div>
         {children}
       </main>
