@@ -162,20 +162,22 @@ export default function Table({
     >
       <ContextMenu innerRef={contextMenu} options={actions}></ContextMenu>
       <div className="overflow-x-auto shadow-md ">
+        {selection ? (
         <div
           className={
             "p-4 bg-primary-300 shadow-md border-l-4 text-primary-100 dark:bg-primary-950 dark:text-primary-300"
           }
         >
-          {selection ? (
+
             <Button
               icon={faClose}
               onClick={() => {
                 setSelection(false);
               }}
             ></Button>
-          ) : null}
+
         </div>
+        ) : null}
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-primary-900 uppercase bg-primary-200 dark:bg-primary-950 dark:bg-opacity-50 dark:text-primary-50">
             <tr>
