@@ -12,8 +12,9 @@ import {
 import { useEffect, useRef, useState } from "react";
 import Loader from "./Loader";
 import axios from "axios";
-import { CheckBox } from "../FormIO/form";
+import { CheckBox, InputField } from "../FormIO/form";
 import Button from "./Button";
+import { Select } from "../FormIO/Select";
 
 export default function Table({
   data,
@@ -30,11 +31,22 @@ export default function Table({
   ],
   ...props
 }) {
+  const [allData, setAllData] = useState([]);
   const [fetchedData, setFetchedData] = useState(data);
   const [pageData, setPageData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [selection, setSelection] = useState(false);
+  const [colFilter, selColFilter] = useState({
+    data: [],
+    display: "display",
+    value: "value"
+  });
+  const [fInput, setFInput] = useState("")
+  const [fSelect, SetFSelect] = useState({
+    display: "",
+    value: ""
+  })
   const contextMenu = useRef();
   useEffect(() => {
     document.addEventListener("click", (event) => {
@@ -45,6 +57,7 @@ export default function Table({
     });
     if (!data) {
       setFetchedData(null);
+      setAllData([]);
       setLoading(false);
       return;
     }
@@ -52,21 +65,44 @@ export default function Table({
       axios.get(data.source).then((res) => {
         if (Array.isArray(res.data)) {
           setFetchedData(res.data);
+          setAllData(res.data);
+          console.log(res.data, "  main data");
+
           setLoading(false);
         }
       });
+      // console.log(columns, "cols")
+    }
+    if (columns.length > 0) {
+      const cols = columns.map((item) => {
+        const tempObj = {
+          display: item.header,
+          value: item.field
+        }
+        return tempObj
+      })
+      const tempData = { ...colFilter }
+      tempData.data = [...cols]
+
+      //console.log(tempData, "my cols")
+      selColFilter(tempData);
     }
   }, []);
 
   useEffect(() => {
+
     let _data = [],
       lowerLimit = (currentPage - 1) * pageLimit,
       upperLimit = pageLimit + (currentPage - 1) * pageLimit;
     if (Array.isArray(fetchedData)) {
       for (let i = lowerLimit; i < upperLimit; i++) {
-        _data.push(fetchedData[i]);
-        setPageData(_data);
+        if(fetchedData[i]){
+
+          _data.push(fetchedData[i]);
+        }
       }
+      // console.log("pagination", _data)
+      setPageData(_data);
     }
   }, [fetchedData, currentPage]);
 
@@ -94,6 +130,53 @@ export default function Table({
   const selectRow = (event) => {
     setSelection(true);
   };
+  const onSelect = (selectedVal) => {
+    SetFSelect(selectedVal);
+    handleFilter(fInput, selectedVal)
+    // console.log(selectedVal, "value on select");
+  }
+  const onChange = (inputVal) => {
+    setFInput(inputVal);
+    handleFilter(inputVal, fSelect)
+    // console.log(inputVal, "input from textField")
+  }
+  const handleFilter = (inputText, selectText) => {
+    if (!fetchedData.length > 0) {
+      return
+    }
+    console.log(colFilter, " col data")
+    //console.log(allData, " all data", typeof allData)
+    const newFilteredData =[]; 
+    allData.forEach((allItem) => {
+      console.log(allItem, " my item")
+      if (selectText.value) {
+
+        if(allItem[selectText.value].toLowerCase().includes(inputText.toString().toLowerCase())){
+          newFilteredData.push(allItem)
+        }
+      } else {
+        
+        const tempData =  []
+        colFilter.data.forEach(item =>{
+          if(allItem[item.value].toLowerCase().includes(inputText.toString().toLowerCase())){
+
+            console.log( allItem[item.value]," inside item " , inputText.toString().toLowerCase() )
+            newFilteredData.push(allItem)
+          }
+          //console.log(allItem[item.value], " fields" ,  inputText.toString().toLowerCase())
+          //return allItem[item.value].toLowerCase().includes(inputText.toString().toLowerCase())
+        }
+        );
+        //console.log(tempData, " dynamic filter");
+        //return tempData
+      }
+    })
+    console.log(inputText, " input", selectText, " select", newFilteredData, " new f")
+    if(Array.isArray(newFilteredData)){
+
+      setFetchedData(newFilteredData)
+    }
+  }
   const handleContextMenu = (event) => {
     event.preventDefault();
     hideContextMenu();
@@ -135,21 +218,38 @@ export default function Table({
       <ContextMenu innerRef={contextMenu} options={actions}></ContextMenu>
       <div className="overflow-x-auto shadow-md ">
 
-          <div
-            className={
-              "p-4 bg-primary-300 shadow-md text-primary-100 dark:bg-primary-950 dark:text-primary-300"
-            }
-          >
-
+        <div
+          className={
+            "p-4 bg-primary-300 shadow-md text-primary-100 dark:bg-primary-950 dark:text-primary-300"
+          }
+        >
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
             {selection ? (
-              <Button
+              <div><Button
                 icon={faClose}
                 onClick={() => {
                   setSelection(false);
                 }}
-              ></Button>
-            ) : null}
+
+              ></Button></div>
+            ) : null
+            }
+            {columns.length > 0 ?
+              < >
+                <InputField
+                  type="text"
+                  placeholder="Search Here"
+                  required={false}
+                  id="Search-filter"
+                  onChange={onChange}
+                />
+                <Select
+                  options={colFilter}
+                  onSelect={onSelect}
+                />
+              </> : null}
           </div>
+        </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-primary-900 uppercase bg-primary-200 dark:bg-primary-950 dark:bg-opacity-50 dark:text-primary-50">
             <tr>
@@ -160,12 +260,12 @@ export default function Table({
               ) : null}
               {columns
                 ? columns.map((column, index) => {
-                    return (
-                      <th scope="col" className="px-6 py-5" key={index}>
-                        {column.header}
-                      </th>
-                    );
-                  })
+                  return (
+                    <th scope="col" className="px-6 py-5" key={index}>
+                      {column.header}
+                    </th>
+                  );
+                })
                 : null}
             </tr>
           </thead>
