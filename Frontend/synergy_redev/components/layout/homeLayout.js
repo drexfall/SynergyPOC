@@ -324,13 +324,15 @@ const Layout = ({ children, sidebar = true }) => {
         </div>
       </aside>
       <main className={`pt-16 ${isMenuOpen && "pl-64"} ${styles.body}`}>
-        <div
-          className={
-            "w-full bg-secondary-300 dark:bg-secondary-900 dark:bg-opacity-70"
-          }
-        >
-          {showMenu && <Breadcrumb></Breadcrumb>}
-        </div>
+        {showMenu && (
+          <div
+            className={
+              "w-full bg-secondary-300 dark:bg-secondary-900 dark:bg-opacity-70"
+            }
+          >
+            <Breadcrumb></Breadcrumb>
+          </div>
+        )}
         {children}
       </main>
 

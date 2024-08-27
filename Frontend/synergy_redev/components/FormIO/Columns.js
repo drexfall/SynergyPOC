@@ -1,17 +1,19 @@
-import React from 'react';
+import React from "react";
 
 const Columns = ({ components, renderComponent }) => {
-    return (
-        <div className="flex flex-wrap -mx-2">
-            {components.map((col, index) => (
-                <div key={index} className={`w-full md:w-${col.width}/12 px-2`}>
-                    {col.components.map((childComponent) =>
-                        renderComponent(childComponent)
-                    )}
-                </div>
-            ))}
-        </div>
-    );
+  return (
+    <div className="flex flex-wrap">
+      {components
+        ? components.map((element, index) => {
+            return (
+              <div key={index} className={`w-full  px-2`}>
+                {renderComponent(element)}
+              </div>
+            );
+          })
+        : null}
+    </div>
+  );
 };
 
 export default Columns;
