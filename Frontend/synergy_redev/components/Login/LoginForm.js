@@ -7,9 +7,11 @@ import Image from 'next/image'
 import Logo from '../../Assets/Images/Logo.png';
 import style from './Login.module.css';
 import { useRouter } from "next/router";
+import Loader from "../custom/Loader";
 
 const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
   
     const formik = useFormik({
@@ -40,18 +42,20 @@ const LoginForm = () => {
         //   .required('Please select a portal'),
       }),
       onSubmit: async (values) => {
-        console.log(values)
+        setLoading(true);
+        console.log(values);
         try {
           const response = await axios.post('/auth/api/Authenticate/AuthenticateUser?email=' + values.email + '&password=' + values.password);
           console.log(response.data);
           await axios.post('/api/insertUser', response.data);
+          setLoading(false);
           await router.push('/');
         } catch (error) {
+          setLoading(false);
           if (error.response.status === 401) {
             alert('Invalid email and password. Please try again.')
           }
           console.error(error);
-          // Handle error (e.g., show an error message)
         }
       }
     });
@@ -146,26 +150,38 @@ const LoginForm = () => {
                       <div className="text-red-500 text-sm mt-1">{formik.errors.portal}</div>
                     ) : null} */}
   
-                    <button
-                      type="submit"
-                      className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                    >
-                      <svg
-                        className="w-6 h-6 -ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                        <circle cx="8.5" cy="7" r="4" />
-                        <path d="M20 8v6M23 11h-6" />
-                      </svg>
-                      <span className="ml-3">Login</span>
-                    </button>
+
+                      {loading ?
+                          <button
+                          type="button"
+                          className="mt-5 tracking-wide font-semibold bg-indigo-400 text-gray-100 w-full py-4 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center cursor-default"
+                          >
+                            <Loader></Loader>
+                          </button>
+                          :
+                          (
+                          <button
+                              type="submit"
+                              className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                          >
+                            <svg
+                                className="w-6 h-6 -ml-2"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                              <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                              <circle cx="8.5" cy="7" r="4"/>
+                              <path d="M20 8v6M23 11h-6"/>
+                            </svg>
+                            <span className="ml-3">Login</span>
+                          </button>
+                          )
+                      }
                   </form>
-  
+
                   <p className="mt-6 text-xs text-gray-600 text-center">
                     I agree to Synergy's&nbsp;
                     <a href="#" className="border-b border-gray-500 border-dotted">

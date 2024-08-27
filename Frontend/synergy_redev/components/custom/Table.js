@@ -137,7 +137,7 @@ export default function Table({
 
           <div
             className={
-              "p-4 bg-primary-300 shadow-md text-primary-100 dark:bg-primary-950 dark:text-primary-300"
+              "p-4 bg-primary-300 shadow-md border-l-4 text-primary-100 dark:bg-primary-950 dark:text-primary-300"
             }
           >
 
@@ -237,7 +237,7 @@ export default function Table({
           <ul className="flex items-center -space-x-px h-8 text-xs">
             <li
               role={"button"}
-              className="flex items-center justify-center px-3 h-8 leading-tight bg-white rounded-s-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white rounded-s-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               onClick={() => {
                 setCurrentPage(1);
               }}
@@ -269,7 +269,10 @@ export default function Table({
                 <li
                   role={"button"}
                   aria-current="page"
-                  className={`${[currentPage - 1, currentPage, currentPage + 1].includes(index + 1) ? "flex" : "hidden"}  items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-800 dark:text-white`}
+                  id={`page-${index + 1}`}
+                  className={`${[currentPage - 1, currentPage, currentPage + 1].includes(index + 1) ? "flex" : "hidden"} items-center justify-center px-3 h-8 text-gray-500 leading-tight border 
+                  border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
+                  ${currentPage === index + 1 && 'bg-indigo-400 text-white hover:bg-indigo-400 dark:bg-blue-100 dark:text-blue-700 dark:hover:bg-blue-100' }`}
                   onClick={() => {
                     setCurrentPage(index + 1);
                   }}
