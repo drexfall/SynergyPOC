@@ -3,11 +3,28 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    {
+      pattern: /bg-(info|success|danger)+/,
+      variants: ["dark"],
+    },
+    {
+      pattern: /text-(info|success|danger)+/,
+      variants: ["dark"],
+    },
+    {
+      pattern: /border-(info|success|danger)+/,
+      variants: ["dark"],
+    },
+  ],
   theme: {
     extend: {
       colors: ({ colors }) => ({
         primary: colors.indigo,
         secondary: colors.gray,
+        success: colors.green,
+        danger: colors.red,
+        info: colors.cyan,
       }),
 
       animation: {
