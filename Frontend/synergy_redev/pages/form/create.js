@@ -10,6 +10,7 @@ import Loader from "../../components/custom/Loader";
 import Button from "../../components/custom/Button";
 import { Select } from "../../components/FormIO/Select";
 import DataGridComponent from "../../components/FormIO/datagrid";
+import Columns from "../../components/FormIO/Columns";
 
 export default function Editor() {
   const [loading, setLoading] = useState(false);
@@ -183,6 +184,10 @@ export default function Editor() {
             </button>
           </div>
         );
+
+      case "columns":
+        return <Columns components={components} renderComponent={renderComponent} />;
+
       default:
         return null;
     }
