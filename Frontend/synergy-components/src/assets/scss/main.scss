@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.sbdocs{
+  @apply bg-indigo-50 dark:bg-gray-900 !important;
+} 
