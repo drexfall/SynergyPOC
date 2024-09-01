@@ -1,4 +1,7 @@
 .idea/
 bin/
 obj/
-node_modules/
+*/**/node_modules/
+*/**/.next
+*/**/storybook-static
+*storybook.log
