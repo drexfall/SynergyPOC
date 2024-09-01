@@ -4,14 +4,22 @@ module.exports = {
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx|mdx)"],
   /** Expose public folder to storybook as static */
   staticDirs: ["../public"],
-  addons: ["@storybook/addon-links", "@storybook/addon-essentials", {
-    name: "@storybook/addon-postcss",
-    options: {
-      postcssLoaderOptions: {
-        implementation: require("postcss"),
+  addons: [
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    {
+      name: "@storybook/addon-postcss",
+      options: {
+        postcssLoaderOptions: {
+          implementation: require("postcss"),
+        },
       },
     },
-  }, "@storybook/addon-webpack5-compiler-babel", "@storybook/addon-themes", "@storybook/addon-styling-webpack"],
+    "@storybook/addon-webpack5-compiler-babel",
+    "@storybook/addon-themes",
+    "@storybook/addon-styling-webpack",
+    "storybook-dark-mode",
+  ],
   core: {
     builder: "webpack5",
   },
