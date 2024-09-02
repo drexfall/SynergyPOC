@@ -1,6 +1,6 @@
 import { fn } from '@storybook/test';
-import { Button } from '../components/Button';
-import {InputField} from "../components/form";
+import { Button } from '../../../components/Button';
+import {InputField} from "../../../components/form";
 
 // More on how to set up src at: https://storybook.js.org/docs/writing-stories#default-export
 export default {
