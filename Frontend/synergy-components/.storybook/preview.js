@@ -1,4 +1,4 @@
-import "../src/assets/scss/main.scss";
+import "../src/scss/main.scss";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import { themes } from "@storybook/theming";
 import { addons } from "@storybook/preview-api";

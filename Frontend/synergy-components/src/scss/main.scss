@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sbdocs {
+  @apply bg-indigo-50 dark:bg-gray-900 !important;
+  .sb-bar{
+    @apply bg-indigo-50 dark:bg-gray-900 !important;
+  }
+  p, h1, h2, h3, h4, h5, h6 {
+    @apply text-indigo-950 dark:text-indigo-50 !important;
+  }
+  th,td{
+    @apply bg-indigo-50 dark:bg-gray-900 !important;
+    >span{
+      @apply text-opacity-85 text-indigo-950 dark:text-indigo-50 !important;
+    }
+  }
+} 

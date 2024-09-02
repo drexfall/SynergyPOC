@@ -43,6 +43,9 @@
     "tailwindcss": "^3.4.10"
   },
   "dependencies": {
-    "@storybook/addon-docs": "^8.2.9"
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@storybook/addon-docs": "^8.2.9",
+    "axios": "^1.7.7"
   }
 }
