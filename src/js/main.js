@@ -8,6 +8,9 @@ import * as bootstrap from 'bootstrap'
 // Import Grid.js
 import {Grid} from "gridjs";
 
+// Import Material Icons
+import 'material-symbols';
+
 window.addEventListener("load", () => {
 	new Grid({
 		columns: ["Name", "Email", "Phone Number"],

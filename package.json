@@ -14,7 +14,8 @@
     "@ag-grid-community/core": "^32.1.0",
     "ag-grid-community": "^32.1.0",
     "bootstrap": "^5.3.3",
-    "gridjs": "^6.2.0"
+    "gridjs": "^6.2.0",
+    "material-symbols": "^0.23.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
