@@ -14,7 +14,8 @@ module.exports = {
 	devServer: {
 		static: path.resolve(__dirname, 'dist'),
 		port: 8080,
-		hot: true
+		hot: true,
+		watchFiles: ['src/**/*']
 	},
 	plugins: [
 		new HtmlWebpackPlugin({ template: './src/index.html' })
@@ -22,7 +23,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(scss)$/,
+				test:/\.s?css$/,
 				use: [
 					{
 						// Adds CSS to the DOM by injecting a `<style>` tag
@@ -48,7 +49,7 @@ module.exports = {
 						loader: 'sass-loader'
 					}
 				],
-				exclude: [/node_modules/]
+				
 			}
 		]
 	}
